@@ -20,16 +20,53 @@ ang=0
 
 playerPos=(50,500)
 accel=0
+bulletCooldownMain=0
+bulletCooldown1=0
+bulletCooldown2=0
+bulletCooldown3=0
+bulletCooldown4=0
 
 font = pygame.font.SysFont('Arial', 25)
 image=pygame.image.load("player.png")
 hitbox= pygame.Rect(0,0,36,36)
+bullet= pygame.Rect(0,0,5,20)
+shot1=False
+shot2=False
+shot3=False
+shot4=False
+spawnAssigned1=False
+spawnAssigned2=False
+spawnAssigned3=False
+spawnAssigned4=False
 
+
+def shootBullet(cooldown):
+    currentTime=pygame.time.get_ticks()
+
+    if cooldown+1000>currentTime:
+        return False
+
+    else:
+        return True
 
 def translation(x,y,point):
     nTrans=[x,y]
     res=np.add(nTrans,point)
     return (res[0], res[1])
+
+
+def wrap_around(position):
+    if position[0]>800:
+        position=(position[0]-800,position[1])
+    elif position[0]<0:
+        position=(position[0]+800,position[1])
+    if position[1]>600:
+        position=(position[0],position[1]-600)
+    elif position[1]<0:
+        position=(position[0],position[1]+600)
+    
+    return position
+
 
 cometsize={
     "large":108,
@@ -138,17 +175,17 @@ while game:
     keys = pygame.key.get_pressed()
     if keys[pygame.K_LEFT]:
 
-        ang-=1
+        ang-=2
         
     if keys[pygame.K_RIGHT]:
 
-        ang+=1
+        ang+=2
 
     if keys[pygame.K_UP]:
 
         accel+=0.005
-        if accel>2:
-            accel=2
+        if accel>0.5:
+            accel=0.5
 
     if keys[pygame.K_DOWN]:
 
@@ -158,21 +195,125 @@ while game:
 
     if keys[pygame.K_SPACE]:
 
-        #shootBullet()
-        pass
+        if not shot1: 
+            shot1=shootBullet(bulletCooldownMain)
+            bulletCooldown1=pygame.time.get_ticks()
+            if shot1:
+                bulletCooldownMain=pygame.time.get_ticks()
+
+        elif not shot2:
+            shot2=shootBullet(bulletCooldownMain)
+            bulletCooldown2=pygame.time.get_ticks()
+            if shot2:
+                bulletCooldownMain=pygame.time.get_ticks()
+
+        elif not shot3:
+            shot3=shootBullet(bulletCooldownMain)
+            bulletCooldown3=pygame.time.get_ticks()
+            if shot3:
+                bulletCooldownMain=pygame.time.get_ticks()
+
+        elif not shot4:
+            shot4=shootBullet(bulletCooldownMain)
+            bulletCooldown4=pygame.time.get_ticks()
+            if shot4:
+                bulletCooldownMain=pygame.time.get_ticks()
+
+
 
     if keys[pygame.K_ESCAPE]:
         pygame.quit()
         sys.exit()
 
-    if playerPos[0]>800:
-        playerPos=(playerPos[0]-800,playerPos[1])
-    elif playerPos[0]<0:
-        playerPos=(playerPos[0]+800,playerPos[1])
-    if playerPos[1]>600:
-        playerPos=(playerPos[0],playerPos[1]-600)
-    elif playerPos[1]<0:
-        playerPos=(playerPos[0],playerPos[1]+600)
+    playerPos=wrap_around(playerPos)
+
+    if shot1:
+        while not spawnAssigned1:
+
+            bulletPos1=frontPoint
+
+            distance1=np.subtract(bulletPos1,playerPos)
+            norm1=math.sqrt(distance1[0]**2 + distance1[1]**2)
+            direction1=np.divide(distance1,norm1)*5
+
+            spawnAssigned1=True
+
+        bulletPos1=np.add(bulletPos1,direction1)
+        bulletPos1=wrap_around(bulletPos1)
+
+        bullet.center=bulletPos1
+        pygame.draw.rect(DISPLAYSURF,WHITE,bullet,10)
+        
+        if bulletCooldown1+4000<=pygame.time.get_ticks():
+            shot1=False
+            spawnAssigned1=False
+
+    if shot2:
+        while not spawnAssigned2:
+
+            bulletPos2=frontPoint
+
+            distance2=np.subtract(bulletPos2,playerPos)
+            norm2=math.sqrt(distance2[0]**2 + distance2[1]**2)
+            direction2=np.divide(distance2,norm2)*5
+            
+            spawnAssigned2=True
+
+        bulletPos2=np.add(bulletPos2,direction2)
+        bulletPos2=wrap_around(bulletPos2)
+
+        bullet.center=bulletPos2
+        pygame.draw.rect(DISPLAYSURF,WHITE,bullet,10)
+        
+        if bulletCooldown2+4000<=pygame.time.get_ticks():
+            shot2=False
+            spawnAssigned2=False
+
+    if shot3:
+        while not spawnAssigned3:
+
+            bulletPos3=frontPoint
+
+            distance3=np.subtract(bulletPos3,playerPos)
+            norm3=math.sqrt(distance3[0]**2 + distance3[1]**2)
+            direction3=np.divide(distance3,norm3)*5
+            
+            spawnAssigned3=True
+
+        bulletPos3=np.add(bulletPos3,direction3)
+        bulletPos3=wrap_around(bulletPos3)
+
+        bullet.center=bulletPos3
+        pygame.draw.rect(DISPLAYSURF,WHITE,bullet,10)
+        
+        if bulletCooldown3+4000<=pygame.time.get_ticks():
+            shot3=False
+            spawnAssigned3=False
+
+    if shot4:
+        while not spawnAssigned4:
+
+            bulletPos4=frontPoint
+
+            distance4=np.subtract(bulletPos4,playerPos)
+            norm4=math.sqrt(distance4[0]**2 + distance4[1]**2)
+            direction4=np.divide(distance4,norm4)*5
+            
+            spawnAssigned4=True
+
+        bulletPos4=np.add(bulletPos4,direction4)
+        bulletPos4=wrap_around(bulletPos4)
+
+        bullet.center=bulletPos4
+        pygame.draw.rect(DISPLAYSURF,WHITE,bullet,10)
+        
+        if bulletCooldown4+4000<=pygame.time.get_ticks():
+            shot4=False
+            spawnAssigned4=False
+
+
+
+
 
     pygame.display.update()
     fpsClock.tick(FPS)
