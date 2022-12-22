@@ -6,7 +6,7 @@ from pygame.locals import *
 pygame.init()
 
 DISPLAYSURF= pygame.display.set_mode((800,600))
-pygame.display.set_caption("Pygaming")
+pygame.display.set_caption("Comets")
 fpsClock=pygame.time.Clock()
 FPS=60
 
@@ -20,6 +20,7 @@ ang=0
 
 playerPos=(50,500)
 accel=0
+
 bulletCooldownMain=0
 bulletCooldown1=0
 bulletCooldown2=0
@@ -27,9 +28,11 @@ bulletCooldown3=0
 bulletCooldown4=0
 
 font = pygame.font.SysFont('Arial', 25)
-image=pygame.image.load("player.png")
+player_image=pygame.image.load("player.png")
+bulletImage=pygame.image.load("bullet.png")
 hitbox= pygame.Rect(0,0,36,36)
-bullet= pygame.Rect(0,0,5,20)
+bullet_hitbox= pygame.Rect(0,0,5,20)
+
 shot1=False
 shot2=False
 shot3=False
@@ -154,7 +157,7 @@ while game:
     playerPos=translation(-accel*(playerPos[0]-frontPoint[0]),-accel*(playerPos[1]-frontPoint[1]),playerPos)
 
     DISPLAYSURF.fill(BLACK)
-    rotimage = pygame.transform.rotate(image,-ang)
+    rotimage = pygame.transform.rotate(player_image,-ang)
     rect = rotimage.get_rect(center=playerPos)
     DISPLAYSURF.blit(rotimage,rect)
 
@@ -183,13 +186,13 @@ while game:
 
     if keys[pygame.K_UP]:
 
-        accel+=0.005
-        if accel>0.5:
-            accel=0.5
+        accel+=0.002
+        if accel>0.2:
+            accel=0.2
 
     if keys[pygame.K_DOWN]:
 
-        accel-=0.005 #temporary, delete when done
+        accel-=0.01 #temporary, delete when done
         if accel<0:
             accel=0
 
@@ -241,8 +244,8 @@ while game:
         bulletPos1=np.add(bulletPos1,direction1)
         bulletPos1=wrap_around(bulletPos1)
 
-        bullet.center=bulletPos1
-        pygame.draw.rect(DISPLAYSURF,WHITE,bullet,10)
+        bullet_hitbox.center=bulletPos1
+        pygame.draw.rect(DISPLAYSURF,WHITE,bullet_hitbox,10)
         
         if bulletCooldown1+4000<=pygame.time.get_ticks():
             shot1=False
@@ -262,8 +265,8 @@ while game:
         bulletPos2=np.add(bulletPos2,direction2)
         bulletPos2=wrap_around(bulletPos2)
 
-        bullet.center=bulletPos2
-        pygame.draw.rect(DISPLAYSURF,WHITE,bullet,10)
+        bullet_hitbox.center=bulletPos2
+        pygame.draw.rect(DISPLAYSURF,WHITE,bullet_hitbox,10)
         
         if bulletCooldown2+4000<=pygame.time.get_ticks():
             shot2=False
@@ -283,8 +286,8 @@ while game:
         bulletPos3=np.add(bulletPos3,direction3)
         bulletPos3=wrap_around(bulletPos3)
 
-        bullet.center=bulletPos3
-        pygame.draw.rect(DISPLAYSURF,WHITE,bullet,10)
+        bullet_hitbox.center=bulletPos3
+        pygame.draw.rect(DISPLAYSURF,WHITE,bullet_hitbox,10)
         
         if bulletCooldown3+4000<=pygame.time.get_ticks():
             shot3=False
@@ -304,8 +307,8 @@ while game:
         bulletPos4=np.add(bulletPos4,direction4)
         bulletPos4=wrap_around(bulletPos4)
 
-        bullet.center=bulletPos4
-        pygame.draw.rect(DISPLAYSURF,WHITE,bullet,10)
+        bullet_hitbox.center=bulletPos4
+        pygame.draw.rect(DISPLAYSURF,WHITE,bullet_hitbox,10)
         
         if bulletCooldown4+4000<=pygame.time.get_ticks():
             shot4=False
