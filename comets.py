@@ -1,6 +1,7 @@
 import pygame, sys
 import numpy as np
 import random
+import math
 from pygame.locals import *
 pygame.init()
 
@@ -30,11 +31,12 @@ def translation(x,y,point):
     res=np.add(nTrans,point)
     return (res[0], res[1])
 
+game=True
+while game:
 
-while True:
-
-    midpointTOP=((hitbox.center[0]),hitbox.center[1]-18)
-    midpointBOTTOM=((hitbox.center[0]),hitbox.center[1]+18)
+    front_x= playerPos[0]+ math.cos((ang-90)*(np.pi)/180)*18
+    front_y= playerPos[1]+ math.sin((ang-90)*(np.pi)/180)*18
+    frontPoint=(front_x,front_y)
 
     DISPLAYSURF.fill(BLACK)
     rotimage = pygame.transform.rotate(image,-ang)
@@ -42,11 +44,11 @@ while True:
     DISPLAYSURF.blit(rotimage,rect)
 
 
-    playerPos=translation(-accel*(playerPos[0]-midpointTOP[0]),-accel*(playerPos[1]-midpointTOP[1]),playerPos)
+    playerPos=translation(-accel*(playerPos[0]-frontPoint[0]),-accel*(playerPos[1]-frontPoint[1]),playerPos)
 
     hitbox.center=playerPos
     pygame.draw.rect(DISPLAYSURF,GREEN,hitbox,1)
-    pygame.draw.line(DISPLAYSURF,RED,midpointTOP,midpointBOTTOM,2)
+    pygame.draw.line(DISPLAYSURF,RED,frontPoint,playerPos,2)
     
     for event in pygame.event.get():
         if event.type == QUIT:
@@ -57,11 +59,11 @@ while True:
     keys = pygame.key.get_pressed()
     if keys[pygame.K_LEFT]:
 
-        ang+=1
+        ang-=1
         
     if keys[pygame.K_RIGHT]:
 
-        ang-=1
+        ang+=1
 
     if keys[pygame.K_UP]:
 
