@@ -20,23 +20,6 @@ ang=90
 playerPos=(50,500)
 accel=0
 
-def spawnComet(size):
-    cometType=random.randrange(1,4)
-
-    if cometType==1:
-        size=(50,50)
-
-    elif cometType==2: #size: 1="small", 2="medium", 3="large"
-        size=(125,125)
-
-    else:
-        size=(200,200)
-
-
-def drawTriangle(p1,p2,p3,colour,radius):
-    pygame.draw.line(DISPLAYSURF,colour,p1,p2,radius)
-    pygame.draw.line(DISPLAYSURF,colour,p2,p3,radius)
-    pygame.draw.line(DISPLAYSURF,colour,p3,p1,radius)
 
 def translation(x,y,point):
     nTrans=[x,y]
@@ -52,7 +35,7 @@ while True:
     midpoint=np.divide(np.add(point2,point3),2)
 
     DISPLAYSURF.fill(BLACK)
-    drawTriangle(point1,point2,point3,GREEN,2)
+    pygame.draw.polygon(DISPLAYSURF,WHITE,[point1,point2,point3],2)
 
     playerPos=translation(-accel*(playerPos[0]-point1[0]),-accel*(playerPos[1]-point1[1]),playerPos)
     pygame.draw.line(DISPLAYSURF,RED,midpoint,point1,2)
