@@ -38,13 +38,13 @@ while game:
     front_y= playerPos[1]+ math.sin((ang-90)*(np.pi)/180)*18
     frontPoint=(front_x,front_y)
 
+    playerPos=translation(-accel*(playerPos[0]-frontPoint[0]),-accel*(playerPos[1]-frontPoint[1]),playerPos)
+
     DISPLAYSURF.fill(BLACK)
     rotimage = pygame.transform.rotate(image,-ang)
     rect = rotimage.get_rect(center=playerPos)
     DISPLAYSURF.blit(rotimage,rect)
 
-
-    playerPos=translation(-accel*(playerPos[0]-frontPoint[0]),-accel*(playerPos[1]-frontPoint[1]),playerPos)
 
     hitbox.center=playerPos
     pygame.draw.rect(DISPLAYSURF,GREEN,hitbox,1)
@@ -67,13 +67,13 @@ while game:
 
     if keys[pygame.K_UP]:
 
-        accel+=0.003
-        if accel>3:
-            accel=3
+        accel+=0.005
+        if accel>2:
+            accel=2
 
     if keys[pygame.K_DOWN]:
 
-        accel-=0.003 #temporary, delete when done
+        accel-=0.005 #temporary, delete when done
         if accel<0:
             accel=0
 
