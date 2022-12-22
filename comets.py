@@ -20,11 +20,22 @@ ang=0
 
 playerPos=(50,500)
 accel=0
+bulletCooldown=0
 
 font = pygame.font.SysFont('Arial', 25)
 image=pygame.image.load("player.png")
 hitbox= pygame.Rect(0,0,36,36)
 
+def shootBullet(cooldown):
+    currentTime=pygame.time.get_ticks()
+
+    if cooldown+1000>currentTime:
+        print("can't shoot")
+        return False
+
+    else:
+        print("can shoot")
+        return True
 
 def translation(x,y,point):
     nTrans=[x,y]
@@ -59,11 +70,11 @@ while game:
     keys = pygame.key.get_pressed()
     if keys[pygame.K_LEFT]:
 
-        ang-=1
+        ang-=2
         
     if keys[pygame.K_RIGHT]:
 
-        ang+=1
+        ang+=2
 
     if keys[pygame.K_UP]:
 
@@ -79,8 +90,9 @@ while game:
 
     if keys[pygame.K_SPACE]:
 
-        #shootBullet()
-        pass
+        shot=shootBullet(bulletCooldown)
+        if shot:
+            bulletCooldown=pygame.time.get_ticks()
 
     if keys[pygame.K_ESCAPE]:
         pygame.quit()
