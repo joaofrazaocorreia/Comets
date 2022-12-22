@@ -31,6 +31,82 @@ def translation(x,y,point):
     res=np.add(nTrans,point)
     return (res[0], res[1])
 
+cometsize={
+    "large":108,
+    "medium":72,
+    "small":36
+    }
+
+cometcount=0
+cometlist=[]
+
+class Comet():
+    direction=[1,1]
+    speed=0
+    size="large"
+    hitbox=0
+    def __init__(self,center,direction,speed,size):
+        self.direction=direction
+        self.speed=speed
+        self.size=size
+        self.hitbox=pygame.Rect(center[0]-(cometsize[size]/2),center[1]-(cometsize[size]/2),cometsize[size],cometsize[size])
+        
+    def corner(center,size):
+        return [center[0]-(size/2),center[1]-(size/2)]
+
+    def spawn(center,direction,speed,size):
+        cometlist.append(Comet(center,direction,speed,size))
+
+    def initial():
+        surface_size=DISPLAYSURF.get_size()
+        for _ in range(3):
+            start_pos=(random.randrange(surface_size[0]+1),random.randrange(surface_size[1]+1))
+            start_angle=random.randrange(0,201)/100*np.pi
+            print(start_angle)
+            direction=(np.cos(start_angle),np.sin(start_angle))
+            print(direction)
+            speed=random.randrange(2,4)
+            print(speed)
+            Comet.spawn(start_pos,direction,speed,"large")
+            
+    def move():
+        surface_size=DISPLAYSURF.get_size()
+        for c in cometlist:
+            size=cometsize[c.size]
+            center=c.hitbox.center
+            corner=Comet.corner(center,size)
+            
+            new_center=(center[0]+(c.direction[0]*c.speed),center[1]+(c.direction[1]*c.speed))
+             
+            if new_center[0]<0:
+                c.hitbox.move_ip(surface_size[0],0)
+                
+            elif new_center[0]>surface_size[0]:
+                c.hitbox.move_ip(-1*surface_size[0],0)
+                
+            if new_center[1]<0:
+                c.hitbox.move_ip(0,surface_size[1])
+                
+            elif new_center[1]>surface_size[1]:
+                c.hitbox.move_ip(0,-1*surface_size[1])
+                
+            
+            c.hitbox.move_ip((c.direction[0]*c.speed),(c.direction[1]*c.speed))
+
+
+            
+            
+    def draw():
+        for c in cometlist:
+            
+            pygame.draw.circle(DISPLAYSURF,WHITE,c.hitbox.center,cometsize[c.size]/2)
+            pygame.draw.rect(DISPLAYSURF,GREEN,c.hitbox,1)
+
+
+
+Comet.initial()
+
+
 game=True
 while game:
 
@@ -50,6 +126,9 @@ while game:
     pygame.draw.rect(DISPLAYSURF,GREEN,hitbox,1)
     pygame.draw.line(DISPLAYSURF,RED,frontPoint,playerPos,2)
     
+    Comet.move()
+    Comet.draw()
+
     for event in pygame.event.get():
         if event.type == QUIT:
             pygame.quit()
