@@ -67,17 +67,33 @@ while game:
 
     if keys[pygame.K_UP]:
 
-        accel+=0.001
+        accel+=0.003
+        if accel>3:
+            accel=3
 
     if keys[pygame.K_DOWN]:
 
-        accel-=0.001 #temporary, delete when done
+        accel-=0.003 #temporary, delete when done
+        if accel<0:
+            accel=0
+
+    if keys[pygame.K_SPACE]:
+
+        #shootBullet()
+        pass
 
     if keys[pygame.K_ESCAPE]:
         pygame.quit()
         sys.exit()
 
-
+    if playerPos[0]>800:
+        playerPos=(playerPos[0]-800,playerPos[1])
+    elif playerPos[0]<0:
+        playerPos=(playerPos[0]+800,playerPos[1])
+    if playerPos[1]>600:
+        playerPos=(playerPos[0],playerPos[1]-600)
+    elif playerPos[1]<0:
+        playerPos=(playerPos[0],playerPos[1]+600)
 
     pygame.display.update()
     fpsClock.tick(FPS)
