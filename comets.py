@@ -54,6 +54,7 @@ def translation(x,y,point):
     res=np.add(nTrans,point)
     return (res[0], res[1])
 
+
 def wrap_around(position):
     if position[0]>800:
         position=(position[0]-800,position[1])
@@ -65,6 +66,7 @@ def wrap_around(position):
         position=(position[0],position[1]+600)
     
     return position
+
 
 cometsize={
     "large":108,
@@ -161,6 +163,9 @@ while game:
     pygame.draw.rect(DISPLAYSURF,GREEN,hitbox,1)
     pygame.draw.line(DISPLAYSURF,RED,frontPoint,playerPos,2)
     
+    Comet.move()
+    Comet.draw()
+
     for event in pygame.event.get():
         if event.type == QUIT:
             pygame.quit()
