@@ -15,10 +15,14 @@ GREEN=(0,255,0)
 BLUE=(0,0,255)
 BLACK = (0,0,0)
 
-ang=90
+ang=0
 
 playerPos=(50,500)
 accel=0
+
+font = pygame.font.SysFont('Arial', 25)
+image=pygame.image.load("player.png")
+hitbox= pygame.Rect(0,0,36,36)
 
 
 def translation(x,y,point):
@@ -26,19 +30,23 @@ def translation(x,y,point):
     res=np.add(nTrans,point)
     return (res[0], res[1])
 
-point1=(playerPos[0],playerPos[1]-25)
-point2=(playerPos[0]-18,playerPos[1]+10)
-point3=(playerPos[0]+18,playerPos[1]+10)
 
 while True:
 
-    midpoint=np.divide(np.add(point2,point3),2)
+    midpointTOP=((hitbox.center[0]),hitbox.center[1]-18)
+    midpointBOTTOM=((hitbox.center[0]),hitbox.center[1]+18)
 
     DISPLAYSURF.fill(BLACK)
-    pygame.draw.polygon(DISPLAYSURF,WHITE,[point1,point2,point3],2)
+    rotimage = pygame.transform.rotate(image,-ang)
+    rect = rotimage.get_rect(center=playerPos)
+    DISPLAYSURF.blit(rotimage,rect)
 
-    playerPos=translation(-accel*(playerPos[0]-point1[0]),-accel*(playerPos[1]-point1[1]),playerPos)
-    pygame.draw.line(DISPLAYSURF,RED,midpoint,point1,2)
+
+    playerPos=translation(-accel*(playerPos[0]-midpointTOP[0]),-accel*(playerPos[1]-midpointTOP[1]),playerPos)
+
+    hitbox.center=playerPos
+    pygame.draw.rect(DISPLAYSURF,GREEN,hitbox,1)
+    pygame.draw.line(DISPLAYSURF,RED,midpointTOP,midpointBOTTOM,2)
     
     for event in pygame.event.get():
         if event.type == QUIT:
@@ -49,11 +57,11 @@ while True:
     keys = pygame.key.get_pressed()
     if keys[pygame.K_LEFT]:
 
-        pass
+        ang+=1
         
     if keys[pygame.K_RIGHT]:
 
-        pass
+        ang-=1
 
     if keys[pygame.K_UP]:
 
@@ -66,11 +74,6 @@ while True:
     if keys[pygame.K_ESCAPE]:
         pygame.quit()
         sys.exit()
-
-
-    point1=(playerPos[0],playerPos[1]-25)
-    point2=(playerPos[0]-18,playerPos[1]+10)
-    point3=(playerPos[0]+18,playerPos[1]+10)
 
 
 
