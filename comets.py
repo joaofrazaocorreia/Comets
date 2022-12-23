@@ -23,6 +23,9 @@ BLACK = (0,0,0)
 title_font=pygame.font.SysFont('Arial',150)
 menu_font=pygame.font.SysFont('Arial',70)
 over_font=pygame.font.SysFont('Arial',150)
+lb_title_font=pygame.font.SysFont('Arial',50)
+lb_text_font=pygame.font.SysFont('Arial',30)
+
 
 #Loads images
 player_image=pygame.image.load("player.png")
@@ -66,6 +69,11 @@ cometsize={
     "small":36
     }
 
+cometpoints={
+    "large":50,
+    "medium":10,
+    "small":200
+}
 
 cometmax=8
 cometlist=[]
@@ -75,12 +83,13 @@ class Comet():
     speed=0
     size="large"
     hitbox=0
+    points=0
     def __init__(self,center,direction,speed,size):
         self.direction=direction
         self.speed=speed
         self.size=size
         self.hitbox=pygame.Rect(center[0]-(cometsize[size]/2),center[1]-(cometsize[size]/2),cometsize[size],cometsize[size])
-        
+        self.points=cometpoints[size]
     def corner(center,size):
         return [center[0]-(size/2),center[1]-(size/2)]
 
