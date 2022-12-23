@@ -188,6 +188,7 @@ def gameloop():
     #Calls the Comet variables and class
     global cometlist
     global cometmax
+    global cometmin
     Comet.initial()
 
     #Calls the score and resets it
@@ -195,6 +196,9 @@ def gameloop():
     score=0
     #Initiates a variable for survival score awards
     lastScore=0
+
+    #Initiates a variable for increasing difficulty over time
+    difficultyIncrease=0
 
     #Initiates the movement variables and the spawn point
     ang=0
@@ -222,13 +226,13 @@ def gameloop():
     #Displays the controls for a short while before starting the game
     DISPLAYSURF.fill(BLACK)
 
-    tutorial_movement1=lb_text_font.render("UP to thrust forward",True,WHITE)
+    tutorial_movement1=lb_board_font.render("UP to thrust forward",True,WHITE)
     DISPLAYSURF.blit(tutorial_movement1,(250,200))
 
-    tutorial_movement2=lb_text_font.render("LEFT and RIGHT to turn",True,WHITE)
+    tutorial_movement2=lb_board_font.render("LEFT and RIGHT to turn",True,WHITE)
     DISPLAYSURF.blit(tutorial_movement2,(250,300))
 
-    tutorial_shoot=lb_text_font.render("SPACEBAR to shoot",True,WHITE)
+    tutorial_shoot=lb_board_font.render("SPACEBAR to shoot",True,WHITE)
     DISPLAYSURF.blit(tutorial_shoot,(250,400))
 
     pygame.display.update()
@@ -742,15 +746,18 @@ def gameover():
         screen_time=pygame.time.get_ticks()-screen_start
    
 
-    inp=False
-    leaderboard=open("leaderboard.txt")
+    inp=20
+    leaderboard=open("leaderboard.txt","r")
     lb_list=[]
-    text_lb_title=lb_title_font.render("Leaderboard",True,WHITE)
-    rect_lb_title=text_lb_title.get_rect()
-    rect_lb_title.center=(surface_size[0]/2,surface_size[1]/12)
     
     for line in leaderboard:
         lb_list.append(line.strip())
+
+    leaderboard.close()
+
+    text_lb_title=lb_title_font.render("Leaderboard",True,WHITE)
+    rect_lb_title=text_lb_title.get_rect()
+    rect_lb_title.center=(surface_size[0]/2,surface_size[1]/12)
 
     for l in range(len(lb_list)):
         if score>=int(lb_list[l][4:8]):
@@ -767,11 +774,11 @@ def gameover():
     for l in range(len(lb_list)):
         text_lb_board.append(lb_board_font.render(lb_list[l],True,WHITE))
         rect_lb_board.append(text_lb_board[l].get_rect())
-        rect_lb_board[l].center=(surface_size[0]/2,surface_size[1]/12*offset)
+        rect_lb_board[l].center=(surface_size[0]/2,surface_size[1]/12*(l+2))
         offset=offset+1
 
     play_music("leaderboard_music")
-    if inp==False:
+    if inp==20:
         screen_start=pygame.time.get_ticks()
         screen_time=0
 
@@ -785,35 +792,53 @@ def gameover():
             DISPLAYSURF.blit(text_lb_title,rect_lb_title)
             for l in range(len(rect_lb_board)):
                 DISPLAYSURF.blit(text_lb_board[l],rect_lb_board[l])
-                pygame.display.update()
             
+            pygame.display.update()
             fpsClock.tick(FPS)
             screen_time=pygame.time.get_ticks()-screen_start
 
     else:
-
-        while :
+        print(inp)
+        inp_count=0
+        name=""
+        while inp_count<3:
             for event in pygame.event.get():
                 if event.type==QUIT:
                     pygame.quit()
                     sys.exit()
-                
+                if event.type==pygame.KEYDOWN:
+                    if event.unicode!="":
+                        name=name+event.unicode
+                        text=name+"-"+("0"*(4-len(str(score))))+str(score)
+                        text_lb_board[inp]=lb_board_font.render(text,True,WHITE)
+                        rect_lb_board[inp]=text_lb_board[inp].get_rect()
+                        rect_lb_board[inp].center=(surface_size[0]/2,surface_size[1]/12*(inp+2))
+                        inp_count=inp_count+1
+
+            
             DISPLAYSURF.fill(BLACK)
             DISPLAYSURF.blit(text_lb_title,rect_lb_title)
             for l in range(len(rect_lb_board)):
-                if l!=inp:
-                    DISPLAYSURF.blit(text_lb_board[l],rect_lb_board[l])
-                    
-                    
-
-
-
-
-            
+               DISPLAYSURF.blit(text_lb_board[l],rect_lb_board[l])
+                
                     
             pygame.display.update()
-            
             fpsClock.tick(FPS)
+        
+
+        lb_list[inp]=text
+        leaderboard=open("leaderboard.txt","w")
+        for line in lb_list:
+            line=line+"\n"
+            leaderboard.write(line)
+        print(lb_list)
+        
+        
+    
+    
+        
+
+        pygame.time.wait(1000)
 
 
 
