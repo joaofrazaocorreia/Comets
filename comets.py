@@ -46,6 +46,14 @@ bullet_hitbox= pygame.Rect(0,0,bullet_image.get_width(),bullet_image.get_height(
 score=0
 
 
+#Plays given music and stops the previous one
+def play_music(music):
+    pygame.mixer.music.stop()
+    music_path='./Audio/Music/'+music+'.mp3'
+    pygame.mixer.music.load(music_path)
+    pygame.mixer.music.play(-1)
+
+
 #Only returns True if the last bullet was shot at least 1 second ago.
 def shootBullet(cooldown):
     currentTime=pygame.time.get_ticks()
@@ -217,6 +225,10 @@ def gameloop():
 
     #Delays the start of the loop so the player has time to release the Space key, which is used to select "Start" on the title screen.
     pygame.time.wait(200)
+
+    #Starts playing music
+    play_music("game_music")
+
     game=True
     while game:
 
@@ -623,8 +635,9 @@ def gameloop():
                 pygame.draw.rect(DISPLAYSURF,RED,cometlist[c].hitbox,5)
                 pygame.display.update()
 
-                #Plays a death sound
+                #Plays a death sound and stops the music
                 pygame.mixer.Sound.play(death_sound)
+                pygame.mixer.music.stop()
 
                 #Delays for one second so the player can see what happened
                 pygame.time.wait(1000)
