@@ -154,7 +154,7 @@ class Comet():
         for _ in range(2):
             #Checks if spawn position is far away enough from the player
             start_pos=(playerPos)
-            while math.sqrt((start_pos[0]-playerPos[0])**2+(start_pos[1]-playerPos[1]))**2<200:
+            while math.sqrt((start_pos[0]-playerPos[0])**2+(start_pos[1]-playerPos[1])**2)<200:
                 start_pos=(random.randrange(surface_size[0]+1),random.randrange(surface_size[1]+1))
 
             start_angle=random.randrange(0,201)/100*np.pi
@@ -264,6 +264,7 @@ def gameloop():
     #Initiates the movement variables and the spawn point
     ang=0
     global playerPos
+    playerPos=(400,300)
     accel=0
     propulsion=(0,0)
 
