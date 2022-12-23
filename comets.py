@@ -207,6 +207,7 @@ def gameloop():
     #Calls the Comet variables and class
     global cometlist
     global cometmax
+    global cometmin
     Comet.initial()
 
     #Calls the score and resets it
@@ -214,6 +215,9 @@ def gameloop():
     score=0
     #Initiates a variable for survival score awards
     lastScore=0
+
+    #Initiates a variable for increasing difficulty over time
+    difficultyIncrease=0
 
     #Initiates the movement variables and the spawn point
     ang=0
