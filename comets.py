@@ -79,6 +79,7 @@ cometpoints={
 }
 
 cometmax=8
+cometmin=3
 cometlist=[]
 
 class Comet():
@@ -158,7 +159,7 @@ class Comet():
                 
                 Comet.spawn(start_pos,direction,speed,"small")
 
-        elif len(cometlist)<3:
+        elif len(cometlist)<cometmin:
             start_pos=(random.randrange(surface_size[0]+1),random.randrange(surface_size[1]+1))
             start_angle=random.randrange(0,201)/100*np.pi
             direction=(np.cos(start_angle),np.sin(start_angle))
@@ -698,8 +699,8 @@ def gameover():
     for line in leaderboard:
         lb_list.append(line.strip())
 
-    for line in lb_list:
-        if score>=line[]
+    #for line in lb_list:
+        #if score>=line[]
 
     board=True
     while board:
