@@ -31,8 +31,8 @@ bulletCooldown4=0
 font = pygame.font.SysFont('Arial', 25)
 player_image=pygame.image.load("player.png")
 bullet_image=pygame.image.load("bullet.png")
-hitbox= pygame.Rect(0,0,36,36)
-bullet_hitbox= pygame.Rect(0,0,22,22)
+hitbox= pygame.Rect(0,0,player_image.get_width(),player_image.get_height())
+bullet_hitbox= pygame.Rect(0,0,bullet_image.get_width(),bullet_image.get_height())
 
 shot1=False
 shot2=False
@@ -175,8 +175,8 @@ while game:
 
     playerPos=np.add(propulsion,playerPos)
 
-    front_x= playerPos[0]+ math.cos((ang-90)*(np.pi)/180)*18
-    front_y= playerPos[1]+ math.sin((ang-90)*(np.pi)/180)*18
+    front_x= playerPos[0]+ math.cos((ang-90)*(np.pi)/180)*(player_image.get_width()/2)
+    front_y= playerPos[1]+ math.sin((ang-90)*(np.pi)/180)*(player_image.get_height()/2)
     frontPoint=(front_x,front_y)
 
     DISPLAYSURF.fill(BLACK)
@@ -407,9 +407,14 @@ while game:
             shot4=False
             spawnAssigned4=False
 
-
-
+    for c in range(len(cometlist)):
+        if hitbox.colliderect(cometlist[c].hitbox):
+            pygame.draw.rect(DISPLAYSURF,RED,hitbox,5)
+            pygame.draw.rect(DISPLAYSURF,RED,cometlist[c].hitbox,5)
+            game=False
+            
 
 
     pygame.display.update()
     fpsClock.tick(FPS)
+pygame.time.wait(1000)
