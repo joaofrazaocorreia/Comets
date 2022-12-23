@@ -146,6 +146,7 @@ class Comet():
             Comet.spawn(start_pos,direction,speed,"large") 
 
 
+
 def gameloop():
     global cometlist
     global cometmax
@@ -425,6 +426,7 @@ def gameloop():
         fpsClock.tick(FPS)
 
 
+
 def title():
     text_title=title_font.render("COMETS",True,WHITE)
     rect_title=text_title.get_rect()
@@ -476,6 +478,7 @@ def title():
 
         pygame.display.update() 
         fpsClock.tick(FPS)
+
 
 
 def gameover():
