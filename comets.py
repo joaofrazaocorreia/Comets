@@ -409,8 +409,8 @@ def gameloop():
             pygame.quit()
             sys.exit()
 
-        #Gives 10 points of score every second the player is alive
-        if lastScore+1000<=pygame.time.get_ticks():
+        #Gives 10 points of score every 2 seconds the player is alive
+        if lastScore+2000<=pygame.time.get_ticks():
             lastScore=pygame.time.get_ticks()
             score+=10
 
