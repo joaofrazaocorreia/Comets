@@ -64,6 +64,25 @@ def shootBullet(cooldown):
     else:
         return True
 
+def moveBullet(bulletPos,direction,rotation):
+
+            #Moves the bullet towards it's direction
+            bulletPos=np.add(bulletPos,direction)
+
+            #Moves the bullet to the other side of the screen if it were to exit the borders
+            bulletPos=wrap_around(bulletPos)
+
+            #Assigns the bullet's hitbox
+            bullet_hitbox.center=bulletPos
+            rect = rotation.get_rect(center=bulletPos)
+            
+            #Draws the bullet
+            pygame.draw.rect(DISPLAYSURF,GREEN,bullet_hitbox,-1)
+            DISPLAYSURF.blit(rotation,rect)
+
+            #Returns the new position
+            return bulletPos
+
 
 #Function for moving object positions to the opposite side of the screen once they reach the screen borders
 def wrap_around(position):
@@ -202,7 +221,7 @@ def gameloop():
 
     #Initiates the movement variables and the spawn point
     ang=0
-    playerPos=(400,500)
+    playerPos=(400,300)
     accel=0
     propulsion=(0,0)
 
@@ -227,13 +246,15 @@ def gameloop():
     DISPLAYSURF.fill(BLACK)
 
     tutorial_movement1=lb_board_font.render("UP to thrust forward",True,WHITE)
-    DISPLAYSURF.blit(tutorial_movement1,(250,200))
+
+    DISPLAYSURF.blit(tutorial_movement1,(250,150))
 
     tutorial_movement2=lb_board_font.render("LEFT and RIGHT to turn",True,WHITE)
-    DISPLAYSURF.blit(tutorial_movement2,(250,300))
+    DISPLAYSURF.blit(tutorial_movement2,(250,250))
 
     tutorial_shoot=lb_board_font.render("SPACEBAR to shoot",True,WHITE)
-    DISPLAYSURF.blit(tutorial_shoot,(250,400))
+    DISPLAYSURF.blit(tutorial_shoot,(250,350))
+
 
     pygame.display.update()
     pygame.time.wait(2500)
@@ -420,19 +441,7 @@ def gameloop():
                 #Completes the value assignment
                 spawnAssigned1=True
 
-            #Moves the bullet towards it's direction
-            bulletPos1=np.add(bulletPos1,direction1)
-
-            #Moves the bullet to the other side of the screen if it were to exit the borders
-            bulletPos1=wrap_around(bulletPos1)
-
-            #Assigns the bullet's hitbox
-            bullet_hitbox.center=bulletPos1
-            rect1 = rotation1.get_rect(center=bulletPos1)
-            
-            #Draws the bullet
-            pygame.draw.rect(DISPLAYSURF,GREEN,bullet_hitbox,-1)
-            DISPLAYSURF.blit(rotation1,rect1)
+            bulletPos1=moveBullet(bulletPos1,direction1,rotation1)
 
             #Checks all Comet hitboxes for collision
             for i in range(len(cometlist)):
@@ -471,19 +480,7 @@ def gameloop():
                 #Completes the value assignment
                 spawnAssigned2=True
 
-            #Moves the bullet towards it's direction
-            bulletPos2=np.add(bulletPos2,direction2)
-
-            #Moves the bullet to the other side of the screen if it were to exit the borders
-            bulletPos2=wrap_around(bulletPos2)
-
-            #Assigns the bullet's hitbox
-            bullet_hitbox.center=bulletPos2
-            rect2 = rotation2.get_rect(center=bulletPos2)
-            
-            #Draws the bullet
-            pygame.draw.rect(DISPLAYSURF,GREEN,bullet_hitbox,-1)
-            DISPLAYSURF.blit(rotation2,rect2)
+            bulletPos2=moveBullet(bulletPos2,direction2,rotation2)
 
             #Checks all Comet hitboxes for collision
             for i in range(len(cometlist)):
@@ -522,19 +519,7 @@ def gameloop():
                 #Completes the value assignment
                 spawnAssigned3=True
 
-            #Moves the bullet towards it's direction
-            bulletPos3=np.add(bulletPos3,direction3)
-
-            #Moves the bullet to the other side of the screen if it were to exit the borders
-            bulletPos3=wrap_around(bulletPos3)
-
-            #Assigns the bullet's hitbox
-            bullet_hitbox.center=bulletPos3
-            rect3 = rotation3.get_rect(center=bulletPos3)
-            
-            #Draws the bullet
-            pygame.draw.rect(DISPLAYSURF,GREEN,bullet_hitbox,-1)
-            DISPLAYSURF.blit(rotation3,rect3)
+            bulletPos3=moveBullet(bulletPos3,direction3,rotation3)
 
             #Checks all Comet hitboxes for collision
             for i in range(len(cometlist)):
@@ -573,19 +558,7 @@ def gameloop():
                 #Completes the value assignment
                 spawnAssigned4=True
 
-            #Moves the bullet towards it's direction
-            bulletPos4=np.add(bulletPos4,direction4)
-
-            #Moves the bullet to the other side of the screen if it were to exit the borders
-            bulletPos4=wrap_around(bulletPos4)
-
-            #Assigns the bullet's hitbox
-            bullet_hitbox.center=bulletPos4
-            rect4 = rotation4.get_rect(center=bulletPos4)
-            
-            #Draws the bullet
-            pygame.draw.rect(DISPLAYSURF,GREEN,bullet_hitbox,-1)
-            DISPLAYSURF.blit(rotation4,rect4)
+            bulletPos4=moveBullet(bulletPos4,direction4,rotation4)
 
             #Checks all Comet hitboxes for collision
             for i in range(len(cometlist)):
