@@ -42,7 +42,8 @@ boom_sound=pygame.mixer.Sound('./Audio/Sounds/boom.mp3')
 hitbox= pygame.Rect(0,0,player_image.get_width(),player_image.get_height())
 bullet_hitbox= pygame.Rect(0,0,bullet_image.get_width(),bullet_image.get_height())
 
-#Initiates the score
+#Initiates the score and player position
+playerPos=(400,300)
 score=0
 
 
@@ -221,7 +222,7 @@ def gameloop():
 
     #Initiates the movement variables and the spawn point
     ang=0
-    playerPos=(400,300)
+    global playerPos
     accel=0
     propulsion=(0,0)
 
