@@ -199,10 +199,6 @@ while game:
         if event.type == QUIT:
             pygame.quit()
             sys.exit()
-        if event.type == pygame.KEYDOWN: #<------------------------------for
-            if event.key == pygame.K_SPACE:#<----------------------------testing
-                Comet.split(random.randrange(len(cometlist)))#<----------purposes
-
 
     keys = pygame.key.get_pressed()
     if keys[pygame.K_LEFT]:
@@ -281,9 +277,12 @@ while game:
         pygame.draw.rect(DISPLAYSURF,GREEN,bullet_hitbox,1)
         DISPLAYSURF.blit(rotation1,rect1)
 
-        for i in cometlist:
-            if bullet_hitbox.colliderect(i.hitbox):
+        for i in range(len(cometlist)):
+            if bullet_hitbox.colliderect(cometlist[i].hitbox):
                 killBullet=True
+                Comet.split(i)
+                break
+                
         if bulletCooldown1+4000<=pygame.time.get_ticks():
             killBullet=True
 
@@ -313,9 +312,12 @@ while game:
         pygame.draw.rect(DISPLAYSURF,GREEN,bullet_hitbox,1)
         DISPLAYSURF.blit(rotation2,rect2)
 
-        for i in cometlist:
-            if bullet_hitbox.colliderect(i.hitbox):
+        for i in range(len(cometlist)):
+            if bullet_hitbox.colliderect(cometlist[i].hitbox):
                 killBullet=True
+                Comet.split(i)
+                break
+                
         if bulletCooldown2+4000<=pygame.time.get_ticks():
             killBullet=True
 
@@ -345,9 +347,12 @@ while game:
         pygame.draw.rect(DISPLAYSURF,GREEN,bullet_hitbox,1)
         DISPLAYSURF.blit(rotation3,rect3)
 
-        for i in cometlist:
-            if bullet_hitbox.colliderect(i.hitbox):
+        for i in range(len(cometlist)):
+            if bullet_hitbox.colliderect(cometlist[i].hitbox):
                 killBullet=True
+                Comet.split(i)
+                break
+                
         if bulletCooldown3+4000<=pygame.time.get_ticks():
             killBullet=True
 
@@ -377,9 +382,12 @@ while game:
         pygame.draw.rect(DISPLAYSURF,GREEN,bullet_hitbox,1)
         DISPLAYSURF.blit(rotation4,rect4)
 
-        for i in cometlist:
-            if bullet_hitbox.colliderect(i.hitbox):
+        for i in range(len(cometlist)):
+            if bullet_hitbox.colliderect(cometlist[i].hitbox):
                 killBullet=True
+                Comet.split(i)
+                break
+
         if bulletCooldown4+4000<=pygame.time.get_ticks():
             killBullet=True
 
