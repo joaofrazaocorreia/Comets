@@ -742,7 +742,7 @@ def gameover():
         screen_time=pygame.time.get_ticks()-screen_start
    
 
-    inp=0
+    inp=False
     leaderboard=open("leaderboard.txt")
     lb_list=[]
     text_lb_title=lb_title_font.render("Leaderboard",True,WHITE)
@@ -771,10 +771,10 @@ def gameover():
         offset=offset+1
 
     play_music("leaderboard_music")
-    if inp==0:
+    if inp==False:
         screen_start=pygame.time.get_ticks()
         screen_time=0
-        print(screen_time)
+
         while screen_time<6000:
             for event in pygame.event.get():
                 if event.type==QUIT:
@@ -789,7 +789,32 @@ def gameover():
             
             fpsClock.tick(FPS)
             screen_time=pygame.time.get_ticks()-screen_start
-        
+
+    else:
+
+        while :
+            for event in pygame.event.get():
+                if event.type==QUIT:
+                    pygame.quit()
+                    sys.exit()
+                
+            DISPLAYSURF.fill(BLACK)
+            DISPLAYSURF.blit(text_lb_title,rect_lb_title)
+            for l in range(len(rect_lb_board)):
+                if l!=inp:
+                    DISPLAYSURF.blit(text_lb_board[l],rect_lb_board[l])
+                    
+                    
+
+
+
+
+            
+                    
+            pygame.display.update()
+            
+            fpsClock.tick(FPS)
+
 
 
 title()
