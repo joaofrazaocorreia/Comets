@@ -1,4 +1,4 @@
-# Fantasy Battle Defense Dealer
+# Comets
 
 **Autoria:**
 Tomás Carvalho nº 22203333
