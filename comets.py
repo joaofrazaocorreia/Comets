@@ -231,6 +231,7 @@ while game:
     playerPos=wrap_around(playerPos)
 
     if shot1:
+        killBullet=False
         while not spawnAssigned1:
 
             bulletPos1=frontPoint
@@ -250,12 +251,19 @@ while game:
         
         pygame.draw.rect(DISPLAYSURF,GREEN,bullet_hitbox,1)
         DISPLAYSURF.blit(rotation1,rect1)
-        
+
+        for i in cometlist:
+            if bullet_hitbox.colliderect(i.hitbox):
+                killBullet=True
         if bulletCooldown1+4000<=pygame.time.get_ticks():
+            killBullet=True
+
+        if killBullet:
             shot1=False
             spawnAssigned1=False
 
     if shot2:
+        killBullet=False
         while not spawnAssigned2:
 
             bulletPos2=frontPoint
@@ -275,12 +283,19 @@ while game:
         
         pygame.draw.rect(DISPLAYSURF,GREEN,bullet_hitbox,1)
         DISPLAYSURF.blit(rotation2,rect2)
-        
+
+        for i in cometlist:
+            if bullet_hitbox.colliderect(i.hitbox):
+                killBullet=True
         if bulletCooldown2+4000<=pygame.time.get_ticks():
+            killBullet=True
+
+        if killBullet:
             shot2=False
             spawnAssigned2=False
 
     if shot3:
+        killBullet=False
         while not spawnAssigned3:
 
             bulletPos3=frontPoint
@@ -300,12 +315,19 @@ while game:
         
         pygame.draw.rect(DISPLAYSURF,GREEN,bullet_hitbox,1)
         DISPLAYSURF.blit(rotation3,rect3)
-        
+
+        for i in cometlist:
+            if bullet_hitbox.colliderect(i.hitbox):
+                killBullet=True
         if bulletCooldown3+4000<=pygame.time.get_ticks():
+            killBullet=True
+
+        if killBullet:
             shot3=False
             spawnAssigned3=False
 
     if shot4:
+        killBullet=False
         while not spawnAssigned4:
 
             bulletPos4=frontPoint
@@ -325,8 +347,14 @@ while game:
         
         pygame.draw.rect(DISPLAYSURF,GREEN,bullet_hitbox,1)
         DISPLAYSURF.blit(rotation4,rect4)
-        
+
+        for i in cometlist:
+            if bullet_hitbox.colliderect(i.hitbox):
+                killBullet=True
         if bulletCooldown4+4000<=pygame.time.get_ticks():
+            killBullet=True
+
+        if killBullet:
             shot4=False
             spawnAssigned4=False
 
