@@ -172,7 +172,7 @@ def gameloop():
     spawnAssigned3=False
     spawnAssigned4=False
 
-    pygame.time.wait(100)
+    pygame.time.wait(200)
     game=True
     while game:
 
@@ -189,8 +189,7 @@ def gameloop():
 
 
         hitbox.center=playerPos
-        pygame.draw.rect(DISPLAYSURF,GREEN,hitbox,1)
-        pygame.draw.line(DISPLAYSURF,RED,frontPoint,playerPos,2)
+        pygame.draw.rect(DISPLAYSURF,GREEN,hitbox,-1)
         
         Comet.move()
         Comet.draw()
@@ -289,7 +288,7 @@ def gameloop():
             bullet_hitbox.center=bulletPos1
             rect1 = rotation1.get_rect(center=bulletPos1)
             
-            pygame.draw.rect(DISPLAYSURF,GREEN,bullet_hitbox,1)
+            pygame.draw.rect(DISPLAYSURF,GREEN,bullet_hitbox,-1)
             DISPLAYSURF.blit(rotation1,rect1)
 
             for i in range(len(cometlist)):
@@ -324,7 +323,7 @@ def gameloop():
             bullet_hitbox.center=bulletPos2
             rect2 = rotation2.get_rect(center=bulletPos2)
             
-            pygame.draw.rect(DISPLAYSURF,GREEN,bullet_hitbox,1)
+            pygame.draw.rect(DISPLAYSURF,GREEN,bullet_hitbox,-1)
             DISPLAYSURF.blit(rotation2,rect2)
 
             for i in range(len(cometlist)):
@@ -359,7 +358,7 @@ def gameloop():
             bullet_hitbox.center=bulletPos3
             rect3 = rotation3.get_rect(center=bulletPos3)
             
-            pygame.draw.rect(DISPLAYSURF,GREEN,bullet_hitbox,1)
+            pygame.draw.rect(DISPLAYSURF,GREEN,bullet_hitbox,-1)
             DISPLAYSURF.blit(rotation3,rect3)
 
             for i in range(len(cometlist)):
@@ -394,7 +393,7 @@ def gameloop():
             bullet_hitbox.center=bulletPos4
             rect4 = rotation4.get_rect(center=bulletPos4)
             
-            pygame.draw.rect(DISPLAYSURF,GREEN,bullet_hitbox,1)
+            pygame.draw.rect(DISPLAYSURF,GREEN,bullet_hitbox,-1)
             DISPLAYSURF.blit(rotation4,rect4)
 
             for i in range(len(cometlist)):
