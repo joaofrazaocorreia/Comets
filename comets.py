@@ -137,7 +137,7 @@ class Comet():
     def initial():
         for _ in range(2):
             start_pos=(playerPos)
-            while np.linalg.norm(start_pos[0]-playerPos[0],start_pos[1]-playerPos[1])<200:
+            while (start_pos[0]-playerPos[0])**2+(start_pos[1]-playerPos[1])**2<200:
                 start_pos=(random.randrange(surface_size[0]+1),random.randrange(surface_size[1]+1))
 
             start_angle=random.randrange(0,201)/100*np.pi
@@ -181,8 +181,12 @@ class Comet():
             start_pos=Comet.corner(blown.hitbox.center,cometsize[blown.size])
             speed=blown.speed
             
+            angle_list=[100]
             for _ in range (min(3,split_max)):
-                start_angle=random.randrange(0,201)/100*np.pi
+                start_angle=100
+                while start_angle in angle_list:
+                    start_angle=random.randrange(0,5)/2*np.pi
+                angle_list.append(start_angle)
                 direction=(np.cos(start_angle),np.sin(start_angle))
                 
                 Comet.spawn(start_pos,direction,speed,"medium")
@@ -190,14 +194,22 @@ class Comet():
         elif blown.size=="medium":
             start_pos=Comet.corner(blown.hitbox.center,cometsize[blown.size])
             speed=blown.speed
+            
+            angle_list=[100]
             for _ in range (min(5,split_max)):
-                start_angle=random.randrange(0,201)/100*np.pi
+                start_angle=100
+                while start_angle in angle_list:
+                    start_angle=random.randrange(0,5)/2*np.pi
+                angle_list.append(start_angle) 
                 direction=(np.cos(start_angle),np.sin(start_angle))
                 
                 Comet.spawn(start_pos,direction,speed,"small")
 
         elif len(cometlist)<cometmin:
-            start_pos=(random.randrange(surface_size[0]+1),random.randrange(surface_size[1]+1))
+            start_pos=(playerPos)
+            while (start_pos[0]-playerPos[0])**2+(start_pos[1]-playerPos[1])**2<200:
+                start_pos=(random.randrange(surface_size[0]+1),random.randrange(surface_size[1]+1))
+
             start_angle=random.randrange(0,201)/100*np.pi
             direction=(np.cos(start_angle),np.sin(start_angle))
             speed=random.randrange(2,4)
