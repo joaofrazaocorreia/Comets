@@ -390,9 +390,10 @@ def gameloop():
             #Checks all Comet hitboxes for collision
             for i in range(len(cometlist)):
 
-                #If a collision is detected, "kills" the bullet and splits the respective comet
+                #If a collision is detected, "kills" the bullet, adds score, and splits the respective comet
                 if bullet_hitbox.colliderect(cometlist[i].hitbox):
                     killBullet=True
+                    score+=cometlist[i].points
                     Comet.split(i)
                     break
                     
@@ -439,9 +440,10 @@ def gameloop():
             #Checks all Comet hitboxes for collision
             for i in range(len(cometlist)):
 
-                #If a collision is detected, "kills" the bullet and splits the respective comet
+                #If a collision is detected, "kills" the bullet, adds score, and splits the respective comet
                 if bullet_hitbox.colliderect(cometlist[i].hitbox):
                     killBullet=True
+                    score+=cometlist[i].points
                     Comet.split(i)
                     break
                     
@@ -488,9 +490,10 @@ def gameloop():
             #Checks all Comet hitboxes for collision
             for i in range(len(cometlist)):
 
-                #If a collision is detected, "kills" the bullet and splits the respective comet
+                #If a collision is detected, "kills" the bullet, adds score, and splits the respective comet
                 if bullet_hitbox.colliderect(cometlist[i].hitbox):
                     killBullet=True
+                    score+=cometlist[i].points
                     Comet.split(i)
                     break
 
@@ -537,9 +540,10 @@ def gameloop():
             #Checks all Comet hitboxes for collision
             for i in range(len(cometlist)):
 
-                #If a collision is detected, "kills" the bullet and splits the respective comet
+                #If a collision is detected, "kills" the bullet, adds score, and splits the respective comet
                 if bullet_hitbox.colliderect(cometlist[i].hitbox):
                     killBullet=True
+                    score+=cometlist[i].points
                     Comet.split(i)
                     break
 
@@ -551,6 +555,8 @@ def gameloop():
             if killBullet:
                 shot4=False
                 spawnAssigned4=False
+
+
 
 
         #Caps the score at 9999
