@@ -37,7 +37,8 @@ cometsize={
     "small":36
     }
 
-cometcount=0
+
+cometmax=9
 cometlist=[]
 
 class Comet():
@@ -62,11 +63,8 @@ class Comet():
         for _ in range(3):
             start_pos=(random.randrange(surface_size[0]+1),random.randrange(surface_size[1]+1))
             start_angle=random.randrange(0,201)/100*np.pi
-            print(start_angle)
             direction=(np.cos(start_angle),np.sin(start_angle))
-            print(direction)
             speed=random.randrange(2,4)
-            print(speed)
             Comet.spawn(start_pos,direction,speed,"large")
             
     def move():
@@ -94,8 +92,6 @@ class Comet():
             c.hitbox.move_ip((c.direction[0]*c.speed),(c.direction[1]*c.speed))
 
 
-            
-            
     def draw():
         for c in cometlist:
             
@@ -103,9 +99,39 @@ class Comet():
             pygame.draw.rect(DISPLAYSURF,GREEN,c.hitbox,1)
 
 
+    def split(list_pos):
+        blown=cometlist.pop(list_pos)
+        split_max=cometmax-len(cometlist)
+        if blown.size=="large":
+            start_pos=Comet.corner(blown.hitbox.center,cometsize[blown.size])
+            speed=blown.speed
+            
+            for _ in range (min(3,split_max)):
+                start_angle=random.randrange(0,201)/100*np.pi
+                direction=(np.cos(start_angle),np.sin(start_angle))
+                
+                Comet.spawn(start_pos,direction,speed,"medium")
+     
+        elif blown.size=="medium":
+            start_pos=Comet.corner(blown.hitbox.center,cometsize[blown.size])
+            speed=blown.speed
+            for _ in range (min(5,split_max)):
+                start_angle=random.randrange(0,201)/100*np.pi
+                direction=(np.cos(start_angle),np.sin(start_angle))
+                
+                Comet.spawn(start_pos,direction,speed,"small")
+
+        elif len(cometlist)<3:
+            surface_size=DISPLAYSURF.get_size()
+            start_pos=(random.randrange(surface_size[0]+1),random.randrange(surface_size[1]+1))
+            start_angle=random.randrange(0,201)/100*np.pi
+            direction=(np.cos(start_angle),np.sin(start_angle))
+            speed=random.randrange(2,4)
+            Comet.spawn(start_pos,direction,speed,"large") 
+             
+
 
 Comet.initial()
-
 
 game=True
 while game:
@@ -133,6 +159,9 @@ while game:
         if event.type == QUIT:
             pygame.quit()
             sys.exit()
+        if event.type == pygame.KEYDOWN: #<------------------------------for
+            if event.key == pygame.K_SPACE:#<----------------------------testing
+                Comet.split(random.randrange(len(cometlist)))#<----------purposes
 
 
     keys = pygame.key.get_pressed()
@@ -157,7 +186,7 @@ while game:
             accel=0
 
     if keys[pygame.K_SPACE]:
-
+        
         #shootBullet()
         pass
 
