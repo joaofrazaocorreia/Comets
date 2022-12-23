@@ -20,6 +20,7 @@ BLUE=(0,0,255)
 BLACK = (0,0,0)
 
 #Loads fonts
+score_font=pygame.font.SysFont('Arial',25)
 title_font=pygame.font.SysFont('Arial',150)
 menu_font=pygame.font.SysFont('Arial',70)
 over_font=pygame.font.SysFont('Arial',150)
@@ -35,6 +36,8 @@ bullet_image=pygame.image.load("bullet.png")
 hitbox= pygame.Rect(0,0,player_image.get_width(),player_image.get_height())
 bullet_hitbox= pygame.Rect(0,0,bullet_image.get_width(),bullet_image.get_height())
 
+#Initiates the score
+score=0
 
 
 #Only returns True if the last bullet was shot at least 1 second ago.
@@ -171,6 +174,12 @@ def gameloop():
     global cometlist
     global cometmax
     Comet.initial()
+
+    #Calls the score and resets it
+    global score
+    score=0
+    #Initiates a variable for survival score awards
+    lastScore=0
 
     #Initiates the movement variables and the spawn point
     ang=0
@@ -342,6 +351,10 @@ def gameloop():
             pygame.quit()
             sys.exit()
 
+        #Gives 10 points of score every second the player is alive
+        if lastScore+1000<=pygame.time.get_ticks():
+            lastScore=pygame.time.get_ticks()
+            score+=10
 
         #Detects if the first bullet is "alive"
         if shot1:
@@ -538,6 +551,34 @@ def gameloop():
             if killBullet:
                 shot4=False
                 spawnAssigned4=False
+
+
+        #Caps the score at 9999
+        if score>9999:
+            score=9999
+
+        #Assigns an arcade-like display of the score
+        if score<10:
+            score_string="Score: "+"000"+str(score)
+            score_display=score_font.render(score_string,True,WHITE)
+
+        elif score<100:
+            score_string="Score: "+"00"+str(score)
+            score_display=score_font.render(score_string,True,WHITE)
+
+        elif score <1000:
+            score_string="Score: "+"0"+str(score)
+            score_display=score_font.render(score_string,True,WHITE)
+
+        elif score <9999:
+            score_string="Score: "+str(score)
+            score_display=score_font.render(score_string,True,WHITE)
+
+        else:
+            score_string="Score: "+str(score)
+            score_display=score_font.render(score_string,True,RED)
+
+        DISPLAYSURF.blit(score_display,(675,25))
 
 
         #Checks all Comet hitboxes for collision with the player
