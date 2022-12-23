@@ -70,6 +70,31 @@ def wrap_around(position):
     
     return position
 
+def draw_bullet(bullet_position,bullet_direction,bullet_rotation,):
+
+        bullet_position=np.add(bullet_position,bullet_direction)
+        bullet_position=wrap_around(bullet_position)
+
+        bullet_hitbox.center=bullet_position
+        rect = bullet_rotation.get_rect(center=bullet_position)
+        
+        pygame.draw.rect(DISPLAYSURF,GREEN,bullet_hitbox,1)
+        DISPLAYSURF.blit(bullet_rotation,rect)
+
+        for i in range(len(cometlist)):
+            if bullet_hitbox.colliderect(cometlist[i].hitbox):
+                killBullet=True
+                Comet.split(i)
+                break
+                
+        if bulletCooldown1+4000<=pygame.time.get_ticks():
+            killBullet=True
+
+        if killBullet:
+            shot1=False
+            spawnAssigned1=False
+
+
 
 cometsize={
     "large":108,
@@ -272,7 +297,7 @@ while game:
         bulletPos1=wrap_around(bulletPos1)
 
         bullet_hitbox.center=bulletPos1
-        rect1 = rotimage.get_rect(center=np.add(bulletPos1,(15,10)))
+        rect1 = rotation1.get_rect(center=bulletPos1)
         
         pygame.draw.rect(DISPLAYSURF,GREEN,bullet_hitbox,1)
         DISPLAYSURF.blit(rotation1,rect1)
@@ -307,7 +332,7 @@ while game:
         bulletPos2=wrap_around(bulletPos2)
 
         bullet_hitbox.center=bulletPos2
-        rect2 = rotimage.get_rect(center=np.add(bulletPos2,(15,10)))
+        rect2 = rotation2.get_rect(center=bulletPos2)
         
         pygame.draw.rect(DISPLAYSURF,GREEN,bullet_hitbox,1)
         DISPLAYSURF.blit(rotation2,rect2)
@@ -342,7 +367,7 @@ while game:
         bulletPos3=wrap_around(bulletPos3)
 
         bullet_hitbox.center=bulletPos3
-        rect3 = rotimage.get_rect(center=np.add(bulletPos3,(15,10)))
+        rect3 = rotation3.get_rect(center=bulletPos3)
         
         pygame.draw.rect(DISPLAYSURF,GREEN,bullet_hitbox,1)
         DISPLAYSURF.blit(rotation3,rect3)
@@ -377,7 +402,7 @@ while game:
         bulletPos4=wrap_around(bulletPos4)
 
         bullet_hitbox.center=bulletPos4
-        rect4 = rotimage.get_rect(center=np.add(bulletPos4,(15,10)))
+        rect4 = rotation4.get_rect(center=bulletPos4)
         
         pygame.draw.rect(DISPLAYSURF,GREEN,bullet_hitbox,1)
         DISPLAYSURF.blit(rotation4,rect4)
