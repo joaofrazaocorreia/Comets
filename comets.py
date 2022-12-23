@@ -29,9 +29,9 @@ bulletCooldown4=0
 
 font = pygame.font.SysFont('Arial', 25)
 player_image=pygame.image.load("player.png")
-bulletImage=pygame.image.load("bullet.png")
+bullet_image=pygame.image.load("bullet.png")
 hitbox= pygame.Rect(0,0,36,36)
-bullet_hitbox= pygame.Rect(0,0,5,20)
+bullet_hitbox= pygame.Rect(0,0,22,22)
 
 shot1=False
 shot2=False
@@ -238,6 +238,7 @@ while game:
             distance1=np.subtract(bulletPos1,playerPos)
             norm1=math.sqrt(distance1[0]**2 + distance1[1]**2)
             direction1=np.divide(distance1,norm1)*5
+            rotation1 = pygame.transform.rotate(bullet_image,-ang)
 
             spawnAssigned1=True
 
@@ -245,7 +246,10 @@ while game:
         bulletPos1=wrap_around(bulletPos1)
 
         bullet_hitbox.center=bulletPos1
-        pygame.draw.rect(DISPLAYSURF,WHITE,bullet_hitbox,10)
+        rect1 = rotimage.get_rect(center=np.add(bulletPos1,(15,10)))
+        
+        pygame.draw.rect(DISPLAYSURF,GREEN,bullet_hitbox,1)
+        DISPLAYSURF.blit(rotation1,rect1)
         
         if bulletCooldown1+4000<=pygame.time.get_ticks():
             shot1=False
@@ -259,6 +263,7 @@ while game:
             distance2=np.subtract(bulletPos2,playerPos)
             norm2=math.sqrt(distance2[0]**2 + distance2[1]**2)
             direction2=np.divide(distance2,norm2)*5
+            rotation2 = pygame.transform.rotate(bullet_image,-ang)
             
             spawnAssigned2=True
 
@@ -266,7 +271,10 @@ while game:
         bulletPos2=wrap_around(bulletPos2)
 
         bullet_hitbox.center=bulletPos2
-        pygame.draw.rect(DISPLAYSURF,WHITE,bullet_hitbox,10)
+        rect2 = rotimage.get_rect(center=np.add(bulletPos2,(15,10)))
+        
+        pygame.draw.rect(DISPLAYSURF,GREEN,bullet_hitbox,1)
+        DISPLAYSURF.blit(rotation2,rect2)
         
         if bulletCooldown2+4000<=pygame.time.get_ticks():
             shot2=False
@@ -280,6 +288,7 @@ while game:
             distance3=np.subtract(bulletPos3,playerPos)
             norm3=math.sqrt(distance3[0]**2 + distance3[1]**2)
             direction3=np.divide(distance3,norm3)*5
+            rotation3 = pygame.transform.rotate(bullet_image,-ang)
             
             spawnAssigned3=True
 
@@ -287,7 +296,10 @@ while game:
         bulletPos3=wrap_around(bulletPos3)
 
         bullet_hitbox.center=bulletPos3
-        pygame.draw.rect(DISPLAYSURF,WHITE,bullet_hitbox,10)
+        rect3 = rotimage.get_rect(center=np.add(bulletPos3,(15,10)))
+        
+        pygame.draw.rect(DISPLAYSURF,GREEN,bullet_hitbox,1)
+        DISPLAYSURF.blit(rotation3,rect3)
         
         if bulletCooldown3+4000<=pygame.time.get_ticks():
             shot3=False
@@ -301,6 +313,7 @@ while game:
             distance4=np.subtract(bulletPos4,playerPos)
             norm4=math.sqrt(distance4[0]**2 + distance4[1]**2)
             direction4=np.divide(distance4,norm4)*5
+            rotation4 = pygame.transform.rotate(bullet_image,-ang)
             
             spawnAssigned4=True
 
@@ -308,7 +321,10 @@ while game:
         bulletPos4=wrap_around(bulletPos4)
 
         bullet_hitbox.center=bulletPos4
-        pygame.draw.rect(DISPLAYSURF,WHITE,bullet_hitbox,10)
+        rect4 = rotimage.get_rect(center=np.add(bulletPos4,(15,10)))
+        
+        pygame.draw.rect(DISPLAYSURF,GREEN,bullet_hitbox,1)
+        DISPLAYSURF.blit(rotation4,rect4)
         
         if bulletCooldown4+4000<=pygame.time.get_ticks():
             shot4=False
