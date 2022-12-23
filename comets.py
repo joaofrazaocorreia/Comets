@@ -217,7 +217,7 @@ def gameloop():
 
     #Initiates the movement variables and the spawn point
     ang=0
-    playerPos=(400,500)
+    playerPos=(400,300)
     accel=0
     propulsion=(0,0)
 
