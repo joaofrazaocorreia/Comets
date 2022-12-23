@@ -25,7 +25,7 @@ title_font=pygame.font.SysFont('Arial',150)
 menu_font=pygame.font.SysFont('Arial',70)
 over_font=pygame.font.SysFont('Arial',150)
 lb_title_font=pygame.font.SysFont('Arial',50)
-lb_text_font=pygame.font.SysFont('Arial',30)
+lb_board_font=pygame.font.SysFont('Arial',30)
 
 
 #Loads images
@@ -73,9 +73,9 @@ cometsize={
     }
 
 cometpoints={
-    "large":50,
+    "large":200,
     "medium":100,
-    "small":200
+    "small":50
 }
 
 cometmax=8
@@ -174,7 +174,6 @@ def gameloop():
     #Calls the Comet variables and class
     global cometlist
     global cometmax
-    global cometmin
     Comet.initial()
 
     #Calls the score and resets it
@@ -182,9 +181,6 @@ def gameloop():
     score=0
     #Initiates a variable for survival score awards
     lastScore=0
-
-    #Initiates a variable for increasing difficulty over time
-    difficultyIncrease=0
 
     #Initiates the movement variables and the spawn point
     ang=0
@@ -356,16 +352,10 @@ def gameloop():
             pygame.quit()
             sys.exit()
 
-        #Gives 10 points of score every 2 seconds the player is alive
-        if lastScore+2000<=pygame.time.get_ticks():
+        #Gives 10 points of score every second the player is alive
+        if lastScore+1000<=pygame.time.get_ticks():
             lastScore=pygame.time.get_ticks()
             score+=10
-
-        #Increases the minimum and maximum amount of comets every 10 seconds
-        if difficultyIncrease+10000<=pygame.time.get_ticks():
-            difficultyIncrease=pygame.time.get_ticks()
-            cometmax+=2
-            cometmin+=1
 
         #Detects if the first bullet is "alive"
         if shot1:
@@ -619,6 +609,7 @@ def gameloop():
 
         pygame.display.update()
         fpsClock.tick(FPS)
+    
 
 
 
@@ -635,12 +626,12 @@ def title():
     rect_quit=text_quit.get_rect()
     rect_quit.center=(surface_size[0]/2,surface_size[1]/1.5)
 
-
     cursor=1
     img_cursor=pygame.transform.rotate(player_image,-90)
     rect_cursor=img_cursor.get_rect()
     pos_cursor=[surface_size[0]/3,rect_start.center[1]] 
 
+    play_music("menu_music")
     title=True
     while title:
         DISPLAYSURF.fill(BLACK)
@@ -682,7 +673,7 @@ def gameover():
 
     screen_start=pygame.time.get_ticks()
     screen_time=0
-    while screen_time<3000:
+    while screen_time<2000:
         text_over=over_font.render("GAME OVER",True,WHITE)
         rect_over=text_over.get_rect()
         rect_over.center=(surface_size[0]/2,surface_size[1]/2)
@@ -697,47 +688,56 @@ def gameover():
         pygame.display.update()
         fpsClock.tick(FPS)
         screen_time=pygame.time.get_ticks()-screen_start
+   
 
-
-    
+    inp=0
     leaderboard=open("leaderboard.txt")
     lb_list=[]
     text_lb_title=lb_title_font.render("Leaderboard",True,WHITE)
     rect_lb_title=text_lb_title.get_rect()
-    rect_lb_title.center=(surface_size[0]/2,surface_size[1]/10)
+    rect_lb_title.center=(surface_size[0]/2,surface_size[1]/12)
     
     for line in leaderboard:
         lb_list.append(line.strip())
 
-    #for line in lb_list:
-        #if score>=line[]
-
-    board=True
-    while board:
-        for event in pygame.event.get():
-            if event.type==QUIT:
-                pygame.quit()
-                sys.exit()
-            #if event.type==pygame.KEYDOWN:
+    for l in range(len(lb_list)):
+        if score>=int(lb_list[l][4:8]):
+            score_str="0"*(4-len(str(score)))+str(score)
+            lb_list.insert(l,"___-"+score_str)
+            del lb_list[-1]
+            inp=l
             
-        DISPLAYSURF.fill(BLACK)
+            break
+    
+    text_lb_board=[]
+    rect_lb_board=[]
+    offset=2        
+    for l in range(len(lb_list)):
+        text_lb_board.append(lb_board_font.render(lb_list[l],True,WHITE))
+        rect_lb_board.append(text_lb_board[l].get_rect())
+        rect_lb_board[l].center=(surface_size[0]/2,surface_size[1]/12*offset)
+        offset=offset+1
 
-        DISPLAYSURF.blit(text_lb_title,rect_lb_title)
-            
-            
-            
-
-
-
-
-        
+    play_music("leaderboard_music")
+    if inp==0:
+        screen_start=pygame.time.get_ticks()
+        screen_time=0
+        print(screen_time)
+        while screen_time<6000:
+            for event in pygame.event.get():
+                if event.type==QUIT:
+                    pygame.quit()
+                    sys.exit()
                 
-                    
-
-
+            DISPLAYSURF.fill(BLACK)
+            DISPLAYSURF.blit(text_lb_title,rect_lb_title)
+            for l in range(len(rect_lb_board)):
+                DISPLAYSURF.blit(text_lb_board[l],rect_lb_board[l])
+                pygame.display.update()
+            
+            fpsClock.tick(FPS)
+            screen_time=pygame.time.get_ticks()-screen_start
         
-        pygame.display.update()
-        fpsClock.tick(FPS)
-    score=0 #<-------------------------------------
+
 
 title()
