@@ -135,7 +135,10 @@ class Comet():
 
     def initial():
         for _ in range(2):
-            start_pos=(random.randrange(surface_size[0]+1),random.randrange(surface_size[1]+1))
+            start_pos=(playerPos)
+            while np.linalg.norm(start_pos[0]-playerPos[0],start_pos[1]-playerPos[1])<200:
+                start_pos=(random.randrange(surface_size[0]+1),random.randrange(surface_size[1]+1))
+
             start_angle=random.randrange(0,201)/100*np.pi
             direction=(np.cos(start_angle),np.sin(start_angle))
             speed=random.randrange(2,4)
