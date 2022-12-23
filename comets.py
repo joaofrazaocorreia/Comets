@@ -74,7 +74,7 @@ cometsize={
 
 cometpoints={
     "large":50,
-    "medium":10,
+    "medium":100,
     "small":200
 }
 
@@ -690,11 +690,16 @@ def gameover():
 
     
     leaderboard=open("leaderboard.txt")
+    lb_list=[]
     text_lb_title=lb_title_font.render("Leaderboard",True,WHITE)
     rect_lb_title=text_lb_title.get_rect()
     rect_lb_title.center=(surface_size[0]/2,surface_size[1]/10)
+    
+    for line in leaderboard:
+        lb_list.append(line.strip())
 
-
+    for line in lb_list:
+        if score>=line[]
 
     board=True
     while board:
@@ -722,5 +727,6 @@ def gameover():
         
         pygame.display.update()
         fpsClock.tick(FPS)
+    score=0 #<-------------------------------------
 
 title()
