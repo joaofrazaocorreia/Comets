@@ -18,8 +18,9 @@ BLACK = (0,0,0)
 
 ang=0
 
-playerPos=(50,500)
+playerPos=(400,500)
 accel=0
+propulsion=(0,0)
 
 bulletCooldownMain=0
 bulletCooldown1=0
@@ -52,11 +53,6 @@ def shootBullet(cooldown):
     else:
         return True
 
-def translation(x,y,point):
-    nTrans=[x,y]
-    res=np.add(nTrans,point)
-    return (res[0], res[1])
-
 
 def wrap_around(position):
     if position[0]>800:
@@ -69,30 +65,6 @@ def wrap_around(position):
         position=(position[0],position[1]+600)
     
     return position
-
-def draw_bullet(bullet_position,bullet_direction,bullet_rotation,):
-
-        bullet_position=np.add(bullet_position,bullet_direction)
-        bullet_position=wrap_around(bullet_position)
-
-        bullet_hitbox.center=bullet_position
-        rect = bullet_rotation.get_rect(center=bullet_position)
-        
-        pygame.draw.rect(DISPLAYSURF,GREEN,bullet_hitbox,1)
-        DISPLAYSURF.blit(bullet_rotation,rect)
-
-        for i in range(len(cometlist)):
-            if bullet_hitbox.colliderect(cometlist[i].hitbox):
-                killBullet=True
-                Comet.split(i)
-                break
-                
-        if bulletCooldown1+4000<=pygame.time.get_ticks():
-            killBullet=True
-
-        if killBullet:
-            shot1=False
-            spawnAssigned1=False
 
 
 
@@ -201,11 +173,11 @@ Comet.initial()
 game=True
 while game:
 
+    playerPos=np.add(propulsion,playerPos)
+
     front_x= playerPos[0]+ math.cos((ang-90)*(np.pi)/180)*18
     front_y= playerPos[1]+ math.sin((ang-90)*(np.pi)/180)*18
     frontPoint=(front_x,front_y)
-
-    playerPos=translation(-accel*(playerPos[0]-frontPoint[0]),-accel*(playerPos[1]-frontPoint[1]),playerPos)
 
     DISPLAYSURF.fill(BLACK)
     rotimage = pygame.transform.rotate(player_image,-ang)
@@ -225,10 +197,6 @@ while game:
             pygame.quit()
             sys.exit()
 
-
-
-
-
     keys = pygame.key.get_pressed()
     if keys[pygame.K_LEFT]:
 
@@ -240,15 +208,30 @@ while game:
 
     if keys[pygame.K_UP]:
 
-        accel+=0.002
-        if accel>0.2:
-            accel=0.2
+        accel+=0.01
+        if accel>0.1:
+            accel=0.1
+        
+        player_distance=np.subtract(frontPoint,playerPos)
+        player_norm=math.sqrt(player_distance[0]**2 + player_distance[1]**2)
+        player_direction=np.divide(player_distance,player_norm)*accel
 
-    if keys[pygame.K_DOWN]:
 
-        accel-=0.01 #temporary, delete when done
-        if accel<0:
-            accel=0
+        propulsion=np.add(player_direction,propulsion)
+
+        if propulsion[0]>5:
+            propulsion[0]=5
+        elif propulsion[0]<-5:
+            propulsion[0]=-5
+        
+        if propulsion[1]>5:
+            propulsion[1]=5
+        elif propulsion[1]<-5:
+            propulsion[1]=-5
+
+
+    else:
+        accel=0
 
     if keys[pygame.K_SPACE]:
 
@@ -292,7 +275,7 @@ while game:
 
             distance1=np.subtract(bulletPos1,playerPos)
             norm1=math.sqrt(distance1[0]**2 + distance1[1]**2)
-            direction1=np.divide(distance1,norm1)*5
+            direction1=np.divide(distance1,norm1)*8
             rotation1 = pygame.transform.rotate(bullet_image,-ang)
 
             spawnAssigned1=True
@@ -327,7 +310,7 @@ while game:
 
             distance2=np.subtract(bulletPos2,playerPos)
             norm2=math.sqrt(distance2[0]**2 + distance2[1]**2)
-            direction2=np.divide(distance2,norm2)*5
+            direction2=np.divide(distance2,norm2)*8
             rotation2 = pygame.transform.rotate(bullet_image,-ang)
             
             spawnAssigned2=True
@@ -362,7 +345,7 @@ while game:
 
             distance3=np.subtract(bulletPos3,playerPos)
             norm3=math.sqrt(distance3[0]**2 + distance3[1]**2)
-            direction3=np.divide(distance3,norm3)*5
+            direction3=np.divide(distance3,norm3)*8
             rotation3 = pygame.transform.rotate(bullet_image,-ang)
             
             spawnAssigned3=True
@@ -397,7 +380,7 @@ while game:
 
             distance4=np.subtract(bulletPos4,playerPos)
             norm4=math.sqrt(distance4[0]**2 + distance4[1]**2)
-            direction4=np.divide(distance4,norm4)*5
+            direction4=np.divide(distance4,norm4)*8
             rotation4 = pygame.transform.rotate(bullet_image,-ang)
             
             spawnAssigned4=True
