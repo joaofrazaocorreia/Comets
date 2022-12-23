@@ -173,6 +173,7 @@ def gameloop():
     #Calls the Comet variables and class
     global cometlist
     global cometmax
+    global cometmin
     Comet.initial()
 
     #Calls the score and resets it
@@ -180,6 +181,9 @@ def gameloop():
     score=0
     #Initiates a variable for survival score awards
     lastScore=0
+
+    #Initiates a variable for increasing difficulty over time
+    difficultyIncrease=0
 
     #Initiates the movement variables and the spawn point
     ang=0
@@ -351,10 +355,16 @@ def gameloop():
             pygame.quit()
             sys.exit()
 
-        #Gives 10 points of score every second the player is alive
-        if lastScore+1000<=pygame.time.get_ticks():
+        #Gives 10 points of score every 2 seconds the player is alive
+        if lastScore+2000<=pygame.time.get_ticks():
             lastScore=pygame.time.get_ticks()
             score+=10
+
+        #Increases the minimum and maximum amount of comets every 10 seconds
+        if difficultyIncrease+10000<=pygame.time.get_ticks():
+            difficultyIncrease=pygame.time.get_ticks()
+            cometmax+=2
+            cometmin+=1
 
         #Detects if the first bullet is "alive"
         if shot1:
