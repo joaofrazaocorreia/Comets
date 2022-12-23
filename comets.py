@@ -223,8 +223,20 @@ def gameloop():
     spawnAssigned3=False
     spawnAssigned4=False
 
-    #Delays the start of the loop so the player has time to release the Space key, which is used to select "Start" on the title screen.
-    pygame.time.wait(200)
+    #Displays the controls for a short while before starting the game
+    DISPLAYSURF.fill(BLACK)
+
+    tutorial_movement1=lb_text_font.render("UP to thrust forward",True,WHITE)
+    DISPLAYSURF.blit(tutorial_movement1,(250,200))
+
+    tutorial_movement2=lb_text_font.render("LEFT and RIGHT to turn",True,WHITE)
+    DISPLAYSURF.blit(tutorial_movement2,(250,300))
+
+    tutorial_shoot=lb_text_font.render("SPACEBAR to shoot",True,WHITE)
+    DISPLAYSURF.blit(tutorial_shoot,(250,400))
+
+    pygame.display.update()
+    pygame.time.wait(2500)
 
     #Starts playing music
     play_music("game_music")
@@ -644,6 +656,7 @@ def gameloop():
 
                 #Changes the loop variable to False to end the loop
                 game=False
+                break
                 
 
 
