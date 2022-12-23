@@ -642,16 +642,16 @@ def gameloop():
                 #Delays for one second so the player can see what happened
                 pygame.time.wait(1000)
 
-                #Changes the loop variable to False to end the loop and triggers the Game Over function
+                #Changes the loop variable to False to end the loop
                 game=False
-                gameover()
                 
 
 
         pygame.display.update()
         fpsClock.tick(FPS)
 
-
+    #Triggers the game over screen and leaderboard
+    gameover()
 
 def title():
     text_title=title_font.render("COMETS",True,WHITE)
