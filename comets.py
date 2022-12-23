@@ -155,12 +155,11 @@ class Comet():
             Comet.spawn(start_pos,direction,speed,"large") 
 
 
-<<<<<<< HEAD
-#Main game loop
-=======
 
->>>>>>> 199875f0e972115dbf9651d5c68e0674694852b4
+#Main game loop
 def gameloop():
+
+    #Calls the Comet variables and class
     global cometlist
     global cometmax
     Comet.initial()
@@ -182,6 +181,7 @@ def gameloop():
     shot2=False
     shot3=False
     shot4=False
+
     spawnAssigned1=False
     spawnAssigned2=False
     spawnAssigned3=False
@@ -214,6 +214,7 @@ def gameloop():
         hitbox.center=playerPos
         pygame.draw.rect(DISPLAYSURF,GREEN,hitbox,-1)
         
+        #Updates the Comet positions, then draws them
         Comet.move()
         Comet.draw()
 
