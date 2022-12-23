@@ -4,6 +4,7 @@ import random
 import math
 from pygame.locals import *
 pygame.init()
+pygame.mixer.init()
 
 #Initiates the display and the FPS
 DISPLAYSURF= pygame.display.set_mode((800,600))
@@ -32,12 +33,25 @@ lb_board_font=pygame.font.SysFont('Arial',30)
 player_image=pygame.image.load("player.png")
 bullet_image=pygame.image.load("bullet.png")
 
+#Loads sounds
+pew_sound=pygame.mixer.Sound('./Audio/Sounds/pew.mp3')
+death_sound=pygame.mixer.Sound('./Audio/Sounds/death.mp3')
+boom_sound=pygame.mixer.Sound('./Audio/Sounds/boom.mp3')
+
 #Assigns hitboxes for the player and the bullets
 hitbox= pygame.Rect(0,0,player_image.get_width(),player_image.get_height())
 bullet_hitbox= pygame.Rect(0,0,bullet_image.get_width(),bullet_image.get_height())
 
 #Initiates the score
 score=0
+
+
+#Plays given music and stops the previous one
+def play_music(music):
+    pygame.mixer.music.stop()
+    music_path='./Audio/Music/'+music+'.mp3'
+    pygame.mixer.music.load(music_path)
+    pygame.mixer.music.play(-1)
 
 
 #Only returns True if the last bullet was shot at least 1 second ago.
@@ -207,6 +221,10 @@ def gameloop():
 
     #Delays the start of the loop so the player has time to release the Space key, which is used to select "Start" on the title screen.
     pygame.time.wait(200)
+
+    #Starts playing music
+    play_music("game_music")
+
     game=True
     while game:
 
@@ -300,9 +318,10 @@ def gameloop():
                 #Assigns an individual cooldown to the bullet, used for checking how long they have been "alive"
                 bulletCooldown1=pygame.time.get_ticks()
 
-                #If the bullet was shot, resets the shooting cooldown
+                #If the bullet was shot, resets the shooting cooldown and plays a sound
                 if shot1:
                     bulletCooldownMain=pygame.time.get_ticks()
+                    pygame.mixer.Sound.play(pew_sound)
 
 
             #If the second bullet isn't "alive"
@@ -314,9 +333,10 @@ def gameloop():
                 #Assigns an individual cooldown to the bullet, used for checking how long they have been "alive"
                 bulletCooldown2=pygame.time.get_ticks()
 
-                #If the bullet was shot, resets the shooting cooldown
+                #If the bullet was shot, resets the shooting cooldown and plays a sound
                 if shot2:
                     bulletCooldownMain=pygame.time.get_ticks()
+                    pygame.mixer.Sound.play(pew_sound)
 
 
             #If the third bullet isn't "alive"
@@ -328,9 +348,10 @@ def gameloop():
                 #Assigns an individual cooldown to the bullet, used for checking how long they have been "alive"
                 bulletCooldown3=pygame.time.get_ticks()
 
-                #If the bullet was shot, resets the shooting cooldown
+                #If the bullet was shot, resets the shooting cooldown and plays a sound
                 if shot3:
                     bulletCooldownMain=pygame.time.get_ticks()
+                    pygame.mixer.Sound.play(pew_sound)
 
 
             #If the fourth bullet isn't "alive"
@@ -342,9 +363,10 @@ def gameloop():
                 #Assigns an individual cooldown to the bullet, used for checking how long they have been "alive"
                 bulletCooldown4=pygame.time.get_ticks()
 
-                #If the bullet was shot, resets the shooting cooldown
+                #If the bullet was shot, resets the shooting cooldown and plays a sound
                 if shot4:
                     bulletCooldownMain=pygame.time.get_ticks()
+                    pygame.mixer.Sound.play(pew_sound)
 
 
         #Escape key also closes the game
@@ -356,6 +378,14 @@ def gameloop():
         if lastScore+1000<=pygame.time.get_ticks():
             lastScore=pygame.time.get_ticks()
             score+=10
+
+
+        #Increases the minimum and maximum amount of comets every 10 seconds
+        if difficultyIncrease+10000<=pygame.time.get_ticks():
+            difficultyIncrease=pygame.time.get_ticks()
+            cometmax+=2
+            cometmin+=2
+
 
         #Detects if the first bullet is "alive"
         if shot1:
@@ -395,6 +425,7 @@ def gameloop():
                 if bullet_hitbox.colliderect(cometlist[i].hitbox):
                     killBullet=True
                     score+=cometlist[i].points
+                    pygame.mixer.Sound.play(boom_sound)
                     Comet.split(i)
                     break
                     
@@ -445,6 +476,7 @@ def gameloop():
                 if bullet_hitbox.colliderect(cometlist[i].hitbox):
                     killBullet=True
                     score+=cometlist[i].points
+                    pygame.mixer.Sound.play(boom_sound)
                     Comet.split(i)
                     break
                     
@@ -495,6 +527,7 @@ def gameloop():
                 if bullet_hitbox.colliderect(cometlist[i].hitbox):
                     killBullet=True
                     score+=cometlist[i].points
+                    pygame.mixer.Sound.play(boom_sound)
                     Comet.split(i)
                     break
 
@@ -545,6 +578,7 @@ def gameloop():
                 if bullet_hitbox.colliderect(cometlist[i].hitbox):
                     killBullet=True
                     score+=cometlist[i].points
+                    pygame.mixer.Sound.play(boom_sound)
                     Comet.split(i)
                     break
 
@@ -598,12 +632,16 @@ def gameloop():
                 pygame.draw.rect(DISPLAYSURF,RED,hitbox,5)
                 pygame.draw.rect(DISPLAYSURF,RED,cometlist[c].hitbox,5)
                 pygame.display.update()
+
+                #Plays a death sound and stops the music
+                pygame.mixer.Sound.play(death_sound)
+                pygame.mixer.music.stop()
+
                 #Delays for one second so the player can see what happened
                 pygame.time.wait(1000)
 
-                #Changes the loop variable to False to end the loop and triggers the Game Over function
+                #Changes the loop variable to False to end the loop
                 game=False
-                gameover()
                 
 
 
@@ -611,7 +649,8 @@ def gameloop():
         fpsClock.tick(FPS)
     
 
-
+    #Triggers the game over screen and leaderboard
+    gameover()
 
 def title():
     text_title=title_font.render("COMETS",True,WHITE)
