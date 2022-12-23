@@ -1,6 +1,7 @@
 # Comets
 
 **Autoria:**
+
 Tomás Carvalho nº 22203333
 
 - Escreveu as funções do Title Screen e do Game Over Screen + Leaderboard;
@@ -25,7 +26,7 @@ O código está organizado por:
 Define as variáveis globais de cor, fontes, imagens, sons, hitboxes e pontuação;
 2. Main Loop Functions
 Define as funções a usar no Main Game Loop, tais como:
-    - `play_music()`: Começa a tocar uma música de fundo e para a anterior;
+    - `play_music()`: Começa a tocar uma música de fundo e pára a anterior;
     - `shootBullet()`: Verifica se a cooldown de disparo já acabou para poder disparar novamente;
     - `wrap_around()`: Verifica se a posição de um conjunto de coordenadas se encontra fora do ecrã, e passa-o para o lado oposto.
     - `moveBullet()`: Utiliza as variáveis de cada tiro para determinar e desenhar a sua próxima posição.
