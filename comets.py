@@ -4,6 +4,7 @@ import random
 import math
 from pygame.locals import *
 pygame.init()
+pygame.mixer.init()
 
 #Initiates the display and the FPS
 DISPLAYSURF= pygame.display.set_mode((800,600))
@@ -31,6 +32,11 @@ lb_text_font=pygame.font.SysFont('Arial',30)
 #Loads images
 player_image=pygame.image.load("player.png")
 bullet_image=pygame.image.load("bullet.png")
+
+#Loads sounds
+pew_sound=pygame.mixer.Sound('./Audio/Sounds/pew.mp3')
+death_sound=pygame.mixer.Sound('./Audio/Sounds/death.mp3')
+boom_sound=pygame.mixer.Sound('./Audio/Sounds/boom.mp3')
 
 #Assigns hitboxes for the player and the bullets
 hitbox= pygame.Rect(0,0,player_image.get_width(),player_image.get_height())
@@ -304,9 +310,10 @@ def gameloop():
                 #Assigns an individual cooldown to the bullet, used for checking how long they have been "alive"
                 bulletCooldown1=pygame.time.get_ticks()
 
-                #If the bullet was shot, resets the shooting cooldown
+                #If the bullet was shot, resets the shooting cooldown and plays a sound
                 if shot1:
                     bulletCooldownMain=pygame.time.get_ticks()
+                    pygame.mixer.Sound.play(pew_sound)
 
 
             #If the second bullet isn't "alive"
@@ -318,9 +325,10 @@ def gameloop():
                 #Assigns an individual cooldown to the bullet, used for checking how long they have been "alive"
                 bulletCooldown2=pygame.time.get_ticks()
 
-                #If the bullet was shot, resets the shooting cooldown
+                #If the bullet was shot, resets the shooting cooldown and plays a sound
                 if shot2:
                     bulletCooldownMain=pygame.time.get_ticks()
+                    pygame.mixer.Sound.play(pew_sound)
 
 
             #If the third bullet isn't "alive"
@@ -332,9 +340,10 @@ def gameloop():
                 #Assigns an individual cooldown to the bullet, used for checking how long they have been "alive"
                 bulletCooldown3=pygame.time.get_ticks()
 
-                #If the bullet was shot, resets the shooting cooldown
+                #If the bullet was shot, resets the shooting cooldown and plays a sound
                 if shot3:
                     bulletCooldownMain=pygame.time.get_ticks()
+                    pygame.mixer.Sound.play(pew_sound)
 
 
             #If the fourth bullet isn't "alive"
@@ -346,9 +355,10 @@ def gameloop():
                 #Assigns an individual cooldown to the bullet, used for checking how long they have been "alive"
                 bulletCooldown4=pygame.time.get_ticks()
 
-                #If the bullet was shot, resets the shooting cooldown
+                #If the bullet was shot, resets the shooting cooldown and plays a sound
                 if shot4:
                     bulletCooldownMain=pygame.time.get_ticks()
+                    pygame.mixer.Sound.play(pew_sound)
 
 
         #Escape key also closes the game
@@ -365,7 +375,7 @@ def gameloop():
         if difficultyIncrease+10000<=pygame.time.get_ticks():
             difficultyIncrease=pygame.time.get_ticks()
             cometmax+=2
-            cometmin+=1
+            cometmin+=2
 
         #Detects if the first bullet is "alive"
         if shot1:
@@ -405,6 +415,7 @@ def gameloop():
                 if bullet_hitbox.colliderect(cometlist[i].hitbox):
                     killBullet=True
                     score+=cometlist[i].points
+                    pygame.mixer.Sound.play(boom_sound)
                     Comet.split(i)
                     break
                     
@@ -455,6 +466,7 @@ def gameloop():
                 if bullet_hitbox.colliderect(cometlist[i].hitbox):
                     killBullet=True
                     score+=cometlist[i].points
+                    pygame.mixer.Sound.play(boom_sound)
                     Comet.split(i)
                     break
                     
@@ -505,6 +517,7 @@ def gameloop():
                 if bullet_hitbox.colliderect(cometlist[i].hitbox):
                     killBullet=True
                     score+=cometlist[i].points
+                    pygame.mixer.Sound.play(boom_sound)
                     Comet.split(i)
                     break
 
@@ -555,6 +568,7 @@ def gameloop():
                 if bullet_hitbox.colliderect(cometlist[i].hitbox):
                     killBullet=True
                     score+=cometlist[i].points
+                    pygame.mixer.Sound.play(boom_sound)
                     Comet.split(i)
                     break
 
@@ -608,6 +622,10 @@ def gameloop():
                 pygame.draw.rect(DISPLAYSURF,RED,hitbox,5)
                 pygame.draw.rect(DISPLAYSURF,RED,cometlist[c].hitbox,5)
                 pygame.display.update()
+
+                #Plays a death sound
+                pygame.mixer.Sound.play(death_sound)
+
                 #Delays for one second so the player can see what happened
                 pygame.time.wait(1000)
 
