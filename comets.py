@@ -17,7 +17,6 @@ GREEN=(0,255,0)
 BLUE=(0,0,255)
 BLACK = (0,0,0)
 
-font = pygame.font.SysFont('Arial', 25)
 title_font=pygame.font.SysFont('Arial',150)
 menu_font=pygame.font.SysFont('Arial',70)
 over_font=pygame.font.SysFont('Arial',150)
@@ -148,59 +147,6 @@ class Comet():
 
 
 
-def title():
-    text_title=title_font.render("COMETS",True,WHITE)
-    rect_title=text_title.get_rect()
-    rect_title.center=(surface_size[0]/2,surface_size[1]/5)
-
-    text_start=menu_font.render("START",True,WHITE)
-    rect_start=text_start.get_rect()
-    rect_start.center=(surface_size[0]/2,surface_size[1]/2)
-
-    text_quit=menu_font.render("QUIT",True,WHITE)
-    rect_quit=text_quit.get_rect()
-    rect_quit.center=(surface_size[0]/2,surface_size[1]/1.5)
-
-
-    cursor=1
-    img_cursor=pygame.transform.rotate(player_image,-90)
-    rect_cursor=img_cursor.get_rect()
-    pos_cursor=[surface_size[0]/3,rect_start.center[1]] 
-
-    title=True
-    while title:
-        DISPLAYSURF.fill(BLACK)
-        DISPLAYSURF.blit(text_title,rect_title)
-        DISPLAYSURF.blit(text_start,rect_start)
-        DISPLAYSURF.blit(text_quit,rect_quit)
-
-        for event in pygame.event.get():
-            if event.type==QUIT:
-                pygame.quit()
-                sys.exit()
-            if event.type==pygame.KEYDOWN:
-                if event.key==pygame.K_UP:
-                    cursor=1
-                    pos_cursor[1]=rect_start.center[1]
-                if event.key==pygame.K_DOWN:
-                    cursor=2
-                    pos_cursor[1]=rect_quit.center[1]
-                if event.key==pygame.K_SPACE:
-                    if cursor==1:                       
-                        gameloop()
-                    else:
-                        pygame.quit()
-                        sys.exit()
-                    
-
-
-        rect_cursor.center=(pos_cursor)
-        DISPLAYSURF.blit(img_cursor,rect_cursor)
-
-        pygame.display.update() 
-        fpsClock.tick(FPS)
-
-
 def gameloop():
     global cometlist
     global cometmax
@@ -227,7 +173,7 @@ def gameloop():
     spawnAssigned3=False
     spawnAssigned4=False
 
-
+    pygame.time.wait(100)
     game=True
     while game:
 
@@ -469,15 +415,71 @@ def gameloop():
             if hitbox.colliderect(cometlist[c].hitbox):
                 pygame.draw.rect(DISPLAYSURF,RED,hitbox,5)
                 pygame.draw.rect(DISPLAYSURF,RED,cometlist[c].hitbox,5)
+                pygame.display.update()
+                pygame.time.wait(1000)
                 game=False
+                gameover()
                 
 
 
         pygame.display.update()
         fpsClock.tick(FPS)
 
-gameloop()
-pygame.time.wait(1000)
+
+
+def title():
+    text_title=title_font.render("COMETS",True,WHITE)
+    rect_title=text_title.get_rect()
+    rect_title.center=(surface_size[0]/2,surface_size[1]/5)
+
+    text_start=menu_font.render("START",True,WHITE)
+    rect_start=text_start.get_rect()
+    rect_start.center=(surface_size[0]/2,surface_size[1]/2)
+
+    text_quit=menu_font.render("QUIT",True,WHITE)
+    rect_quit=text_quit.get_rect()
+    rect_quit.center=(surface_size[0]/2,surface_size[1]/1.5)
+
+
+    cursor=1
+    img_cursor=pygame.transform.rotate(player_image,-90)
+    rect_cursor=img_cursor.get_rect()
+    pos_cursor=[surface_size[0]/3,rect_start.center[1]] 
+
+    title=True
+    while title:
+        DISPLAYSURF.fill(BLACK)
+        DISPLAYSURF.blit(text_title,rect_title)
+        DISPLAYSURF.blit(text_start,rect_start)
+        DISPLAYSURF.blit(text_quit,rect_quit)
+
+        for event in pygame.event.get():
+            if event.type==QUIT:
+                pygame.quit()
+                sys.exit()
+            if event.type==pygame.KEYDOWN:
+                if event.key==pygame.K_UP:
+                    cursor=1
+                    pos_cursor[1]=rect_start.center[1]
+                if event.key==pygame.K_DOWN:
+                    cursor=2
+                    pos_cursor[1]=rect_quit.center[1]
+                if event.key==pygame.K_SPACE:
+                    if cursor==1:                       
+                        gameloop()
+                    else:
+                        pygame.quit()
+                        sys.exit()
+                    
+
+
+        rect_cursor.center=(pos_cursor)
+        DISPLAYSURF.blit(img_cursor,rect_cursor)
+
+        pygame.display.update() 
+        fpsClock.tick(FPS)
+
+
 
 def gameover():
     global cometlist
