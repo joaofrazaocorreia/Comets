@@ -417,8 +417,8 @@ def gameloop():
             score+=10
 
 
-        #Increases the minimum and maximum amount of comets every 10 seconds
-        if difficultyIncrease+10000<=pygame.time.get_ticks():
+        #Increases the minimum and maximum amount of comets every 15 seconds
+        if difficultyIncrease+15000<=pygame.time.get_ticks():
             difficultyIncrease=pygame.time.get_ticks()
             cometmax+=2
             cometmin+=2
