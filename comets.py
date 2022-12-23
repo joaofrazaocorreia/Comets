@@ -120,9 +120,8 @@ class Comet():
 
     def draw():
         for c in cometlist:
-            
             pygame.draw.circle(DISPLAYSURF,WHITE,c.hitbox.center,cometsize[c.size]/2)
-            pygame.draw.rect(DISPLAYSURF,GREEN,c.hitbox,1)
+
 
 
     def split(list_pos):
@@ -155,11 +154,9 @@ class Comet():
             Comet.spawn(start_pos,direction,speed,"large") 
 
 
-<<<<<<< HEAD
-#Main game loop
-=======
 
->>>>>>> 199875f0e972115dbf9651d5c68e0674694852b4
+#Main game loop
+
 def gameloop():
     global cometlist
     global cometmax
@@ -615,7 +612,7 @@ def gameover():
 
     screen_start=pygame.time.get_ticks()
     screen_time=0
-    while screen_time<6000:
+    while screen_time<3000:
         text_over=over_font.render("GAME OVER",True,WHITE)
         rect_over=text_over.get_rect()
         rect_over.center=(surface_size[0]/2,surface_size[1]/2)
@@ -633,21 +630,32 @@ def gameover():
 
 
     
+    leaderboard=open("leaderboard.txt")
+    text_lb_title=lb_title_font.render("Leaderboard",True,WHITE)
+    rect_lb_title=text_lb_title.get_rect()
+    rect_lb_title.center=(surface_size[0]/2,surface_size[1]/10)
+
+
 
     board=True
     while board:
-        
-        DISPLAYSURF.fill(BLACK)
-
-
-
-
-
         for event in pygame.event.get():
             if event.type==QUIT:
                 pygame.quit()
                 sys.exit()
             #if event.type==pygame.KEYDOWN:
+            
+        DISPLAYSURF.fill(BLACK)
+
+        DISPLAYSURF.blit(text_lb_title,rect_lb_title)
+            
+            
+            
+
+
+
+
+        
                 
                     
 
