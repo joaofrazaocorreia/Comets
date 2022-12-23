@@ -186,9 +186,8 @@ def title():
                     cursor=2
                     pos_cursor[1]=rect_quit.center[1]
                 if event.key==pygame.K_SPACE:
-                    if cursor==1:
-                        Comet.initial()
-                        #gameloop()
+                    if cursor==1:                       
+                        gameloop()
                     else:
                         pygame.quit()
                         sys.exit()
@@ -527,6 +526,4 @@ def gameover():
         pygame.display.update()
         fpsClock.tick(FPS)
 
-
-
-gameover()
+title()
