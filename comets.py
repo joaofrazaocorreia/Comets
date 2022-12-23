@@ -199,9 +199,7 @@ while game:
         if event.type == QUIT:
             pygame.quit()
             sys.exit()
-        if event.type == pygame.KEYDOWN: #<------------------------------for
-            if event.key == pygame.K_SPACE:#<----------------------------testing
-                Comet.split(random.randrange(len(cometlist)))#<----------purposes
+
 
 
     keys = pygame.key.get_pressed()
