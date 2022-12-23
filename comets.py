@@ -99,59 +99,78 @@ def wrap_around(position):
     return position
 
 
-
+#Dictionary to store comet dimensions
 cometsize={
     "large":108,
     "medium":72,
     "small":36
     }
 
+#Dictionary to store comet destruction score bonus
 cometpoints={
     "large":200,
     "medium":100,
     "small":50
 }
-
+#Maximum and minimum amount of comets onscreen
 cometmax=8
 cometmin=3
+
+#List storing all Comet objects
 cometlist=[]
 
+#Class defining Comet attributes and comet-related functions
 class Comet():
+    #Attribute initialization
     direction=[1,1]
     speed=0
     size="large"
     hitbox=0
     points=0
+
+    #Attribute assignment
+    #   direction-initial movement direction vector (x,y)
+    #   speed-initial movement speed
+    #   size-comet size
+    #   hitbox-stores the Rect object for the comet's hitbox
+    #   points-comet destruction score bonus
     def __init__(self,center,direction,speed,size):
         self.direction=direction
         self.speed=speed
         self.size=size
         self.hitbox=pygame.Rect(center[0]-(cometsize[size]/2),center[1]-(cometsize[size]/2),cometsize[size],cometsize[size])
         self.points=cometpoints[size]
+    
+    #Gives the top left corner of a hitbox from its center point and comet size
     def corner(center,size):
         return [center[0]-(size/2),center[1]-(size/2)]
 
+    #Adds a new Comet object to the cometlist list
     def spawn(center,direction,speed,size):
         cometlist.append(Comet(center,direction,speed,size))
 
+    #Spawns the initial comets at game start
     def initial():
         for _ in range(2):
+            #Checks if spawn position is far away enough from the player
             start_pos=(playerPos)
-            while (start_pos[0]-playerPos[0])**2+(start_pos[1]-playerPos[1])**2<200:
+            while math.sqrt((start_pos[0]-playerPos[0])**2+(start_pos[1]-playerPos[1]))**2<200:
                 start_pos=(random.randrange(surface_size[0]+1),random.randrange(surface_size[1]+1))
 
             start_angle=random.randrange(0,201)/100*np.pi
             direction=(np.cos(start_angle),np.sin(start_angle))
             speed=random.randrange(2,4)
             Comet.spawn(start_pos,direction,speed,"large")
-            
+
+    #Moves each Comet's hitbox in cometlist relative to its direction and speed        
     def move():
         for c in cometlist:
             size=cometsize[c.size]
             center=c.hitbox.center 
             
             new_center=(center[0]+(c.direction[0]*c.speed),center[1]+(c.direction[1]*c.speed))
-             
+
+            #Wraps back around if edge of the screen is reached 
             if new_center[0]<0:
                 c.hitbox.move_ip(surface_size[0],0)
                 
@@ -167,47 +186,54 @@ class Comet():
             
             c.hitbox.move_ip((c.direction[0]*c.speed),(c.direction[1]*c.speed))
 
-
+    #Draws each Comet  the game screen according to its hitbox's position
     def draw():
         for c in cometlist:
             pygame.draw.circle(DISPLAYSURF,WHITE,c.hitbox.center,cometsize[c.size]/2)
 
 
-
+    #Deletes destroyed Comets and spawns smaller ones with random direction and same speed as the original
     def split(list_pos):
+        #Deletes Comet from cometlist and keeps it stored in blown variable
         blown=cometlist.pop(list_pos)
         split_max=cometmax-len(cometlist)
+        #Destroys large Comets and creates medium ones
         if blown.size=="large":
             start_pos=Comet.corner(blown.hitbox.center,cometsize[blown.size])
             speed=blown.speed
             
-            angle_list=[100]
+            #Creates a list of used angles
+            angle_list=[]
             for _ in range (min(3,split_max)):
                 start_angle=100
+                #Creates non-repeated angles
                 while start_angle in angle_list:
-                    start_angle=random.randrange(0,5)/2*np.pi
+                    start_angle=random.randrange(0,9)/4*np.pi
                 angle_list.append(start_angle)
                 direction=(np.cos(start_angle),np.sin(start_angle))
                 
                 Comet.spawn(start_pos,direction,speed,"medium")
-     
+        #Destroys medium Comets and creates small ones
         elif blown.size=="medium":
             start_pos=Comet.corner(blown.hitbox.center,cometsize[blown.size])
             speed=blown.speed
-            
+
+            #Creates a list of used angles
             angle_list=[100]
             for _ in range (min(5,split_max)):
                 start_angle=100
+                #Creates non-repeated angles
                 while start_angle in angle_list:
-                    start_angle=random.randrange(0,5)/2*np.pi
+                    start_angle=random.randrange(0,9)/4*np.pi
                 angle_list.append(start_angle) 
                 direction=(np.cos(start_angle),np.sin(start_angle))
                 
                 Comet.spawn(start_pos,direction,speed,"small")
 
+        #Spawns a large comet if the destroyed Comet brought the nº of comets onscreen lower than cometmin
         elif len(cometlist)<cometmin:
             start_pos=(playerPos)
-            while (start_pos[0]-playerPos[0])**2+(start_pos[1]-playerPos[1])**2<200:
+            while math.sqrt((start_pos[0]-playerPos[0])**2+(start_pos[1]-playerPos[1]))**2<200:
                 start_pos=(random.randrange(surface_size[0]+1),random.randrange(surface_size[1]+1))
 
             start_angle=random.randrange(0,201)/100*np.pi
@@ -658,7 +684,9 @@ def gameloop():
     #Triggers the game over screen and leaderboard
     gameover()
 
+#Start screen loop
 def title():
+    #Defines the text to be displayed onscreen
     text_title=title_font.render("COMETS",True,WHITE)
     rect_title=text_title.get_rect()
     rect_title.center=(surface_size[0]/2,surface_size[1]/5)
@@ -671,23 +699,30 @@ def title():
     rect_quit=text_quit.get_rect()
     rect_quit.center=(surface_size[0]/2,surface_size[1]/1.5)
 
+    #Menu cursor attributes initialization
     cursor=1
     img_cursor=pygame.transform.rotate(player_image,-90)
     rect_cursor=img_cursor.get_rect()
     pos_cursor=[surface_size[0]/3,rect_start.center[1]] 
 
+    #Plays the menu music
     play_music("menu_music")
+
+    #Title screen loop
     title=True
     while title:
+        #Draws text onscreen
         DISPLAYSURF.fill(BLACK)
         DISPLAYSURF.blit(text_title,rect_title)
         DISPLAYSURF.blit(text_start,rect_start)
         DISPLAYSURF.blit(text_quit,rect_quit)
 
+
         for event in pygame.event.get():
             if event.type==QUIT:
                 pygame.quit()
                 sys.exit()
+            #Keyboard input handler
             if event.type==pygame.KEYDOWN:
                 if event.key==pygame.K_UP:
                     cursor=1
@@ -696,29 +731,34 @@ def title():
                     cursor=2
                     pos_cursor[1]=rect_quit.center[1]
                 if event.key==pygame.K_SPACE:
-                    if cursor==1:                       
+                    if cursor==1:
+                        #Starts main game loop                       
                         gameloop()
                     else:
+                        #Quits game
                         pygame.quit()
                         sys.exit()
-                    
 
-
+        #Moves cursor position
         rect_cursor.center=(pos_cursor)
+        #Draws cursor onscreen
         DISPLAYSURF.blit(img_cursor,rect_cursor)
 
         pygame.display.update() 
         fpsClock.tick(FPS)
 
 
-
+#Game Over and Leaderboard loops
 def gameover():
     global cometlist
     cometlist=[]
 
+    #Gets time at beginning of Game Over screen
     screen_start=pygame.time.get_ticks()
     screen_time=0
+    #Plays Game Over screen for 2 seconds
     while screen_time<2000:
+        #Draws Game Over text onscreen
         text_over=over_font.render("GAME OVER",True,WHITE)
         rect_over=text_over.get_rect()
         rect_over.center=(surface_size[0]/2,surface_size[1]/2)
@@ -732,22 +772,30 @@ def gameover():
 
         pygame.display.update()
         fpsClock.tick(FPS)
+        #Tracks time elapsed since beginning of Game Over screen
         screen_time=pygame.time.get_ticks()-screen_start
    
+    #Leaderboard section
 
-    inp=20
+    
+    #Opens txt file to read saved highscores
     leaderboard=open("leaderboard.txt","r")
     lb_list=[]
     
+    #Creates list of saved highscores
     for line in leaderboard:
         lb_list.append(line.strip())
 
+    #Closes opened txt file
     leaderboard.close()
 
+    #Defines Leaderboard title text to be displayed
     text_lb_title=lb_title_font.render("Leaderboard",True,WHITE)
     rect_lb_title=text_lb_title.get_rect()
     rect_lb_title.center=(surface_size[0]/2,surface_size[1]/12)
 
+    #Checks if player achieved a highscore; If so, inserts it into lb_list in the correct position
+    inp=20
     for l in range(len(lb_list)):
         if score>=int(lb_list[l][4:8]):
             score_str="0"*(4-len(str(score)))+str(score)
@@ -757,6 +805,7 @@ def gameover():
             
             break
     
+    #Defines Leaderboard score text to be displayed
     text_lb_board=[]
     rect_lb_board=[]
     offset=2        
@@ -766,17 +815,22 @@ def gameover():
         rect_lb_board[l].center=(surface_size[0]/2,surface_size[1]/12*(l+2))
         offset=offset+1
 
+    #plays Leaderboard screen music
     play_music("leaderboard_music")
+
+    
     if inp==20:
         screen_start=pygame.time.get_ticks()
         screen_time=0
 
+        #No Highscore achived loop (hangs for 6 seconds)
         while screen_time<6000:
             for event in pygame.event.get():
                 if event.type==QUIT:
                     pygame.quit()
                     sys.exit()
-                
+
+            #Draws Leaderboard score text onscreen    
             DISPLAYSURF.fill(BLACK)
             DISPLAYSURF.blit(text_lb_title,rect_lb_title)
             for l in range(len(rect_lb_board)):
@@ -787,24 +841,35 @@ def gameover():
             screen_time=pygame.time.get_ticks()-screen_start
 
     else:
-        print(inp)
         inp_count=0
         name=""
+
+        #Highscore achived loop (hangs for 1 second after name entry)
+
+        #Only accepts input of 3 characters
         while inp_count<3:
             for event in pygame.event.get():
                 if event.type==QUIT:
                     pygame.quit()
                     sys.exit()
+                #Text input handler
                 if event.type==pygame.KEYDOWN:
+                    #Only accepts characters
                     if event.unicode!="":
+                        #Adds inputted character to name
                         name=name+event.unicode
+
+                        #Defines player name and score to be displayed, even mid-input
                         text=name+"-"+("0"*(4-len(str(score))))+str(score)
+
+                        #Defines text to be displayed onscreen
                         text_lb_board[inp]=lb_board_font.render(text,True,WHITE)
                         rect_lb_board[inp]=text_lb_board[inp].get_rect()
                         rect_lb_board[inp].center=(surface_size[0]/2,surface_size[1]/12*(inp+2))
+
                         inp_count=inp_count+1
 
-            
+            #Draws Leaderboard score text onscreen
             DISPLAYSURF.fill(BLACK)
             DISPLAYSURF.blit(text_lb_title,rect_lb_title)
             for l in range(len(rect_lb_board)):
@@ -814,21 +879,19 @@ def gameover():
             pygame.display.update()
             fpsClock.tick(FPS)
         
-
+        #Updates score list with player name
         lb_list[inp]=text
+
+        #Reopens txt file to record new highscores
         leaderboard=open("leaderboard.txt","w")
+
+        #Writes scores into txt file
         for line in lb_list:
             line=line+"\n"
             leaderboard.write(line)
-        print(lb_list)
-        
-        
-    
-    
-        
 
+        #Hangs for 1 second
         pygame.time.wait(1000)
 
-
-
+#Game start
 title()
