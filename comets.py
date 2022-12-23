@@ -17,9 +17,9 @@ GREEN=(0,255,0)
 BLUE=(0,0,255)
 BLACK = (0,0,0)
 
-font = pygame.font.SysFont('Arial', 25)
 title_font=pygame.font.SysFont('Arial',150)
 menu_font=pygame.font.SysFont('Arial',70)
+over_font=pygame.font.SysFont('Arial',150)
 player_image=pygame.image.load("player.png")
 bullet_image=pygame.image.load("bullet.png")
 hitbox= pygame.Rect(0,0,player_image.get_width(),player_image.get_height())
@@ -58,7 +58,7 @@ cometsize={
     }
 
 
-cometmax=9
+cometmax=8
 cometlist=[]
 
 class Comet():
@@ -79,7 +79,7 @@ class Comet():
         cometlist.append(Comet(center,direction,speed,size))
 
     def initial():
-        for _ in range(3):
+        for _ in range(2):
             start_pos=(random.randrange(surface_size[0]+1),random.randrange(surface_size[1]+1))
             start_angle=random.randrange(0,201)/100*np.pi
             direction=(np.cos(start_angle),np.sin(start_angle))
@@ -146,61 +146,6 @@ class Comet():
             Comet.spawn(start_pos,direction,speed,"large") 
 
 
-
-def title():
-    text_title=title_font.render("COMETS",True,WHITE)
-    rect_title=text_title.get_rect()
-    rect_title.center=(surface_size[0]/2,surface_size[1]/5)
-
-    text_start=menu_font.render("START",True,WHITE)
-    rect_start=text_start.get_rect()
-    rect_start.center=(surface_size[0]/2,surface_size[1]/2)
-
-    text_quit=menu_font.render("QUIT",True,WHITE)
-    rect_quit=text_quit.get_rect()
-    rect_quit.center=(surface_size[0]/2,surface_size[1]/1.5)
-
-
-    cursor=1
-    img_cursor=pygame.transform.rotate(player_image,-90)
-    rect_cursor=img_cursor.get_rect()
-    pos_cursor=[surface_size[0]/3,rect_start.center[1]] 
-
-    title=True
-    while title:
-        DISPLAYSURF.fill(BLACK)
-        DISPLAYSURF.blit(text_title,rect_title)
-        DISPLAYSURF.blit(text_start,rect_start)
-        DISPLAYSURF.blit(text_quit,rect_quit)
-
-        for event in pygame.event.get():
-            if event.type==QUIT:
-                pygame.quit()
-                sys.exit()
-            if event.type==pygame.KEYDOWN:
-                if event.key==pygame.K_UP:
-                    cursor=1
-                    pos_cursor[1]=rect_start.center[1]
-                if event.key==pygame.K_DOWN:
-                    cursor=2
-                    pos_cursor[1]=rect_quit.center[1]
-                if event.key==pygame.K_SPACE:
-                    if cursor==1:
-                        Comet.initial()
-                        #gameloop()
-                    else:
-                        pygame.quit()
-                        sys.exit()
-                    
-
-
-        rect_cursor.center=(pos_cursor)
-        DISPLAYSURF.blit(img_cursor,rect_cursor)
-
-        pygame.display.update()
-
-title() 
-
 def gameloop():
     global cometlist
     global cometmax
@@ -227,7 +172,7 @@ def gameloop():
     spawnAssigned3=False
     spawnAssigned4=False
 
-
+    pygame.time.wait(100)
     game=True
     while game:
 
@@ -469,13 +414,115 @@ def gameloop():
             if hitbox.colliderect(cometlist[c].hitbox):
                 pygame.draw.rect(DISPLAYSURF,RED,hitbox,5)
                 pygame.draw.rect(DISPLAYSURF,RED,cometlist[c].hitbox,5)
+                pygame.display.update()
+                pygame.time.wait(1000)
                 game=False
+                gameover()
                 
 
 
         pygame.display.update()
         fpsClock.tick(FPS)
 
-gameloop()
-pygame.time.wait(1000)
 
+def title():
+    text_title=title_font.render("COMETS",True,WHITE)
+    rect_title=text_title.get_rect()
+    rect_title.center=(surface_size[0]/2,surface_size[1]/5)
+
+    text_start=menu_font.render("START",True,WHITE)
+    rect_start=text_start.get_rect()
+    rect_start.center=(surface_size[0]/2,surface_size[1]/2)
+
+    text_quit=menu_font.render("QUIT",True,WHITE)
+    rect_quit=text_quit.get_rect()
+    rect_quit.center=(surface_size[0]/2,surface_size[1]/1.5)
+
+
+    cursor=1
+    img_cursor=pygame.transform.rotate(player_image,-90)
+    rect_cursor=img_cursor.get_rect()
+    pos_cursor=[surface_size[0]/3,rect_start.center[1]] 
+
+    title=True
+    while title:
+        DISPLAYSURF.fill(BLACK)
+        DISPLAYSURF.blit(text_title,rect_title)
+        DISPLAYSURF.blit(text_start,rect_start)
+        DISPLAYSURF.blit(text_quit,rect_quit)
+
+        for event in pygame.event.get():
+            if event.type==QUIT:
+                pygame.quit()
+                sys.exit()
+            if event.type==pygame.KEYDOWN:
+                if event.key==pygame.K_UP:
+                    cursor=1
+                    pos_cursor[1]=rect_start.center[1]
+                if event.key==pygame.K_DOWN:
+                    cursor=2
+                    pos_cursor[1]=rect_quit.center[1]
+                if event.key==pygame.K_SPACE:
+                    if cursor==1:                       
+                        gameloop()
+                    else:
+                        pygame.quit()
+                        sys.exit()
+                    
+
+
+        rect_cursor.center=(pos_cursor)
+        DISPLAYSURF.blit(img_cursor,rect_cursor)
+
+        pygame.display.update() 
+        fpsClock.tick(FPS)
+
+
+def gameover():
+    global cometlist
+    cometlist=[]
+
+    screen_start=pygame.time.get_ticks()
+    screen_time=0
+    while screen_time<6000:
+        text_over=over_font.render("GAME OVER",True,WHITE)
+        rect_over=text_over.get_rect()
+        rect_over.center=(surface_size[0]/2,surface_size[1]/2)
+        DISPLAYSURF.fill(BLACK)
+        DISPLAYSURF.blit(text_over,rect_over)
+        
+        for event in pygame.event.get():
+            if event.type==QUIT:
+                pygame.quit()
+                sys.exit()
+
+        pygame.display.update()
+        fpsClock.tick(FPS)
+        screen_time=pygame.time.get_ticks()-screen_start
+
+
+    
+
+    board=True
+    while board:
+        
+        DISPLAYSURF.fill(BLACK)
+
+
+
+
+
+        for event in pygame.event.get():
+            if event.type==QUIT:
+                pygame.quit()
+                sys.exit()
+            #if event.type==pygame.KEYDOWN:
+                
+                    
+
+
+        
+        pygame.display.update()
+        fpsClock.tick(FPS)
+
+title()
